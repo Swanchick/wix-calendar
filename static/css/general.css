@@ -1,0 +1,19 @@
+:root {
+    --panel-color: rgb(250, 250, 250);
+    --border-color: rgb(230, 230, 230);
+    --header-height: 5rem;
+}
+
+.right-border {
+    border-right: solid 1px;
+    border-color: var(--border-color);
+}
+
+.bottom-border {
+    border-bottom: solid 1px;
+    border-color: var(--border-color);
+}
+
+.full-height {
+    height: 100%;
+}
