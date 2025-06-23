@@ -1,9 +1,6 @@
 let redLine = null;
 let currentTime = 0;
 
-window.onload = (e) => {
-    redLine = getRedLine();
-};
 
 function getRedLine() {
     return document.getElementById("red-line");
