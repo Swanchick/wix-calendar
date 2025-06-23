@@ -6,7 +6,7 @@ class Arrow {
     }
 
     #findArrow() {
-        return document.getElementById("red-line");
+        return document.getElementById(ARROW_ID);
     }
 
     setArrowPosition(percentage) {
