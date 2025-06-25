@@ -12,11 +12,13 @@ class Week {
     }
 
     build(today) {
+        const year = today.getFullYear();
+        const month = today.getMonth();
         const currentDayInWeek = today.getDay();
         const currentDayInMonth = today.getDate();
 
         this.#buildWeekNames(currentDayInWeek);
-        this.#buildWeekDays(currentDayInMonth, currentDayInWeek);
+        this.#buildWeekDays(year, month, currentDayInMonth, currentDayInWeek);
         this.#buildDays(currentDayInWeek);
         
     }
@@ -32,15 +34,16 @@ class Week {
         }
     }
 
-    #buildWeekDays(currentDayInMonth, currentDayInWeek) {
+    #buildWeekDays(year, month, currentDayInMonth, currentDayInWeek) {
         if (this.#weekDatesContainer == null) {
             return;
         }
         
-        const firstDay = currentDayInMonth - currentDayInWeek;
+        const weekDays = this.#getWeek(year, month, currentDayInMonth, currentDayInWeek);
+        console.log(weekDays);
 
-        for (let i = 0; i < DAYS_IN_WEEK; i++) {
-            const dayInMonth = firstDay + i;
+        for (let i = 0; i < weekDays.length; i++) {
+            let dayInMonth = weekDays[i];
 
             const dayElement = this.#createWeekDayElement(dayInMonth, i, currentDayInWeek);
             this.#weekDatesContainer.appendChild(dayElement);
@@ -153,15 +156,43 @@ class Week {
         return timeElements;
     }
 
+    #getWeek(year, month, currentDayInMonth, currentDayInWeek) {
+        const days = [];
+
+        const currentMonthDays = this.#getMonthDays(year, month);
+
+        const firstDay = currentDayInMonth - currentDayInWeek;
+        const prevMonth = this.#getPreviousMonth(month);
+        const prevMonthDays = this.#getMonthDays((prevMonth === 12) ? year - 1 : year, prevMonth);
+
+        const nextMonth = this.#getNextMonth(month);
+        const nextMonthDays = this.#getMonthDays((nextMonth === 0) ? year + 1 : year, nextMonth);
+        for (let i = 0; i < DAYS_IN_WEEK; i++) {
+            let actualDay = firstDay + i;
+
+            if (actualDay < 1) {
+                actualDay = prevMonthDays - Math.abs(actualDay);
+            }
+
+            if (actualDay > currentMonthDays) {
+                actualDay = (actualDay % nextMonthDays) + 1;
+            }
+
+            days.push(actualDay);
+        }
+
+        return days;
+    }
+
     #isLeapYear(year) {
         return (year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0));
     }
 
     #getFebruaryDays(year) {
-        return this.#isLeapYear ? 29 : 28;
+        return this.#isLeapYear(year) ? 29 : 28;
     }
 
-    #getCurrentMonthDays(year, currentMonth) {
+    #getMonthDays(year, currentMonth) {
         const days = MONTHS[currentMonth];
 
         const isFebruary = days == 0;
@@ -180,5 +211,14 @@ class Week {
         }
 
         return prevMonth;
+    }
+
+    #getNextMonth(month) {
+        const nextMonth = month + 1;
+        if (month > 11) {
+            return 0;
+        }
+
+        return nextMonth;
     }
 }

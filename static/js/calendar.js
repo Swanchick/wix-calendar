@@ -7,13 +7,6 @@ class Calendar {
         this.#date = new Date();
         this.#arrow = new Arrow();
         this.#week = new Week();
-
-        console.log(this.#date);
-        console.log(this.#date.getDay());
-        console.log(this.#date.getDate());
-        console.log(this.#date.getFullYear());
-        console.log(this.#date.getMonth());
-        console.log(this.#getCurrentSecondsInPercentage());
     }
 
     start() {
