@@ -12,9 +12,9 @@ class Calendar {
         const startDate = new Date(2025, 5, 25, 10, 32);
         const endDate = new Date(2025, 5, 25, 11, 32);
 
-        let testEvent = new Event("Test event", "Test event", startDate, endDate);
+        // let testEvent = new Event("Test event", "Test event", startDate, endDate);
 
-        eventManager.addEvent(testEvent);
+        // eventManager.addEvent(testEvent);
     }
 
     start() {

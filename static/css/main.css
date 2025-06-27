@@ -1,17 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
 
-* {
+html, body {
+    display: flex;
+    flex-direction: column;
+    
     margin: 0;
 
     font-family: "Roboto", sans-serif;
     font-weight: 500;
     font-style: normal;
-}
-
-html, body {
-    display: flex;
-    flex-direction: column;
 
     height: 100%;
 
@@ -31,6 +29,10 @@ header {
 
     padding-left: 2rem;
     padding-right: 2rem;
+}
+
+button:hover {
+    cursor: pointer;
 }
 
 .header-left {
@@ -113,3 +115,4 @@ header {
 .current-day {
     color: var(--current-day-color);
 }
+
