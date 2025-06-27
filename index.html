@@ -39,6 +39,36 @@
         </div>
     </div>
 
+    <div class="event-window" id="event-menu">
+        <div class="event-form">
+            <h1>Create new event</h1>
+            <form>
+                <div class="form-group">
+                    <label>Title</label>
+                    <input name="event-title" type="text" id="event-title">
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="event-description"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Event start time</label>
+                    <input type="datetime-local" name="event-start-time" id="event-start-time">
+                </div>
+
+                <div class="form-group">
+                    <label>Event end time</label>
+                    <input type="datetime-local" name="event-end-time" id="event-end-time">
+                </div>
+
+                <div class="form-submit-container">
+                    <input type="submit" value="Create">
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script src="static/js/globals.js"></script>
     <script src="static/js/event.js"></script>
     <script src="static/js/event_slot.js"></script>

@@ -3,6 +3,8 @@
     --border-color: rgb(230, 230, 230);
     --header-height: 5rem;
     --current-day-color: rgb(31, 147, 255);
+    
+    --event-window-color: rgba(230, 230, 230, 0.5);
 }
 
 .right-border {
@@ -21,4 +23,19 @@
 
 .text-align-center {
     text-align: center;
+}
+
+.hidden {
+    display: none;
+}
+
+.blur {
+    filter: blur(2px);
+    transition: filter 0.1s;
+}
+
+.non-blur {
+    filter: blur(2px);
+
+    transition: filter 0.1s;
 }
