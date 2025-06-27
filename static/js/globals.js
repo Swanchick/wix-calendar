@@ -2,6 +2,10 @@ const WEEK_DATES_ID = "week-dates";
 const DAYS_CONTAINER_ID = "days-container";
 const ARROW_ID = "arrow";
 const WEEK_NAMES_CONTAINER = "week-names-container";
+const EVENT_WINDOW_ID = "event-window";
+const OPEN_EVENT_WINDOW_ID = "open-event-window";
+const CREATE_EVENT_BUTTON = "create-event-button";
+const CLOSE_EVENT_BUTTON = "close-event-button";
 
 const DAY_NAMES = [
     "SUN",

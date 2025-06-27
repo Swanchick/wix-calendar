@@ -41,6 +41,35 @@ header {
     padding-right: 2rem;
 }
 
+.header-button {
+    border: solid 1px rgb(200, 200, 200);
+    background-color: white;
+
+    transition: background-color 0.2s;
+
+    font-size: 18px;
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+}
+
+.header-button:hover {
+    background-color: var(--border-color);
+}
+
+.header-symbol-button {
+    border: none;
+    background: none;
+
+    font-size: 24px;
+    transition: font-size 0.2s;
+}
+
+.header-symbol-button:hover {
+    cursor: pointer;
+    font-size: 26px;
+}
+
+
 button:hover {
     cursor: pointer;
 }
@@ -48,6 +77,8 @@ button:hover {
 .header-left {
     display: flex;
     flex-direction: row;
+
+    align-items: center;
 
     gap: 2rem;
 }
@@ -66,7 +97,29 @@ button:hover {
     flex-direction: column;
     width: 25rem;
 
+    padding: 0.5rem 1.5rem;
+
     /* background-color: var(--panel-color); */
+}
+
+.side-button {
+    width: 50%;
+    height: 3rem;
+    margin-bottom: 1rem;
+
+    background-color: white !important;
+}
+
+.side-button:hover {
+    background-color: var(--current-day-color) !important;
+}
+
+.side-panel-center {
+    display: flex;
+    flex-direction: row;
+
+    justify-content: center;
+    width: 100%;
 }
 
 .week-container {    
@@ -189,7 +242,7 @@ textarea {
     box-shadow: 0px 6px 6px rgb(200, 200, 200);
 }
 
-input[type="submit"] {
+.button {
     border: none;
     background-color: var(--panel-color);
     transition: all 0.1s;
@@ -202,11 +255,14 @@ input[type="submit"] {
     box-shadow: 0px 2px 2px rgb(200, 200, 200);
 }
 
-input[type="submit"]:hover {
+.submit-button {
+    margin-left: 1rem;
+}
+
+.button:hover {
     background-color: var(--current-day-color);
     box-shadow: 0px 6px 6px rgb(200, 200, 200);
 
     color: white;
-
     cursor: pointer;
 }

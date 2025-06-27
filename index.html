@@ -11,12 +11,11 @@
 <body>
     <header>
         <div class="header-left">
-            <button>|||</button>
             <h2>Kyryl's Calendar</h2>
-            <button>Today</button>
+            <button class="header-button">Today</button>
 
-            <button><</button>
-            <button>></button>
+            <button class="header-symbol-button"><</button>
+            <button class="header-symbol-button">></button>
 
             <h2>June 2025</h2>
         </div>
@@ -24,6 +23,8 @@
 
     <div class="main-container">
         <div class="side-container">
+            <button class="button side-button" id="open-event-window">+ Event</button>
+
             <h2>Very cool placeholder</h2>
         </div>
 
@@ -39,7 +40,7 @@
         </div>
     </div>
 
-    <div class="event-window hidden" id="event-menu">
+    <div class="event-window hidden" id="event-window">
         <div class="event-form">
             <h1>Create new event</h1>
             <form>
@@ -63,7 +64,8 @@
                 </div>
 
                 <div class="form-submit-container">
-                    <input type="submit" value="Create">
+                    <input type="submit" value="Create" class="button submit-button" id="create-event-button">
+                    <input type="submit" value="Close" class="button submit-button" id="close-event-button">
                 </div>
             </form>
         </div>
