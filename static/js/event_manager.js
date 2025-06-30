@@ -30,6 +30,15 @@ class EventManager {
         this.#eventForm = document.getElementById(EVENT_FORM_ID);
         this.#eventDetails = document.getElementById(EVENT_DETAILS_ID);
 
+        this.#eventWindow.onclick = (e) => {
+            if (e.target === this.#eventWindow && this.#windowState !== WINDOW_STATE.CLOSED) {
+                this.#closeWindow();
+            }
+        };
+
+        this.#eventForm.onclick = e => e.stopPropagation();
+        this.#eventDetails.onclick = e => e.stopPropagation();
+
         this.#createButton.onclick = (e) => {
             e.preventDefault();
 
@@ -123,6 +132,9 @@ class EventManager {
     }
 
     openDetails(event) {
+        this.#eventWindow.classList.remove("hidden");
+        this.#eventDetails.classList.remove("hidden");
+
         const detailsTitle = document.getElementById(DETAILS_TITLE_ID);
         detailsTitle.textContent = event.getTitle();
 
@@ -131,9 +143,6 @@ class EventManager {
 
         const detailsDescription = document.getElementById(DETAILS_DESCRIPTION_ID);
         detailsDescription.textContent = event.getDescription();
-
-        this.#eventWindow.classList.remove("hidden");
-        this.#eventDetails.classList.remove("hidden");
 
         this.#windowState = WINDOW_STATE.DETAILS;
     }
@@ -144,7 +153,7 @@ class EventManager {
         }
 
         if (!this.#eventDetails.classList.contains("hidden")) {
-            this.#eventForm.classList.add("hidden");
+            this.#eventDetails.classList.add("hidden");
         }
 
         this.#eventWindow.classList.add("hidden");

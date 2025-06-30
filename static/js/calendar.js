@@ -17,13 +17,12 @@ class Calendar {
         this.#eventManager.addEvent(event1);
         this.#eventManager.addEvent(event2);
         this.#eventManager.addEvent(event3);
-
     }
 
     start() {
         this.#week.build(this.#date);
-        this.#updateArrow();
 
+        this.#updateArrow();
         setInterval(() => {this.#updateArrow()}, 1000);
     }
 
