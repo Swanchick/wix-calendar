@@ -1,6 +1,7 @@
+let calendar = null; 
 
 
 window.onload = (_) => {
-    const calendar = new Calendar();
+    calendar = new Calendar();
     calendar.start();
 }

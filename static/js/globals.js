@@ -9,6 +9,11 @@ const CLOSE_EVENT_BUTTON = "close-event-button";
 const EVENT_FORM_ID = "event-form";
 const EVENT_DETAILS_ID = "event-details";
 
+// Detail element ids 
+const DETAILS_TITLE_ID = "event-details-title";
+const DETAILS_TIMES_ID = "event-details-times";
+const DETAILS_DESCRIPTION_ID = "event-details-description";
+
 
 // Form element ids
 const FORM_TITLE_ID = "event-title";
@@ -53,3 +58,13 @@ const ALL_MONTHS = 12;
 
 const DAYS_IN_WEEK = 7;
 const HOURS_IN_DAY = 25;
+
+function getCurrentSecondsInPercentage(date) {
+    const FULL_DAY_IN_SECONDS = 3600 * 24;
+        
+    let seconds = date.getSeconds();
+    let minutesInSeconds = date.getMinutes() * 60;
+    let hoursInSeconds = date.getHours() * 3600;
+
+    return ((hoursInSeconds + minutesInSeconds + seconds) / FULL_DAY_IN_SECONDS) * 100;
+}

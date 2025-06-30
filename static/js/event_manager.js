@@ -9,6 +9,7 @@ class EventManager {
     #eventWindow;
     #eventForm;
     #eventDetails;
+
     #eventButton;
     #createButton;
     #closeButton;
@@ -57,7 +58,7 @@ class EventManager {
             }
         }
 
-        this.#events = [];
+        this.#events = {};
     }
 
     #openForm() {
@@ -121,7 +122,16 @@ class EventManager {
         return isValid;
     }
 
-    openDetails(dateKey) {
+    openDetails(event) {
+        const detailsTitle = document.getElementById(DETAILS_TITLE_ID);
+        detailsTitle.textContent = event.getTitle();
+
+        const detailsTimes = document.getElementById(DETAILS_TIMES_ID);
+        detailsTimes.textContent = event.getTimeStartAndEnd();
+
+        const detailsDescription = document.getElementById(DETAILS_DESCRIPTION_ID);
+        detailsDescription.textContent = event.getDescription();
+
         this.#eventWindow.classList.remove("hidden");
         this.#eventDetails.classList.remove("hidden");
 
@@ -149,10 +159,12 @@ class EventManager {
     addEvent(event) {
         const startDate = event.getStartDate();
         const startDateString = this.dateToKey(startDate);
+        
+        if (this.#events[startDateString] === undefined) {
+            this.#events[startDateString] = [];
+        }
 
-        const eventSlot = new EventSlot(startDateString, event);
-
-        this.#events.push(eventSlot);
+        this.#events[startDateString].push(event);
     }
 
     getTodayEvents(date) {

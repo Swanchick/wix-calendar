@@ -7,8 +7,8 @@ class Calendar {
     constructor() {
         this.#date = new Date();
         this.#arrow = new Arrow();
-        this.#week = new Week();
         this.#eventManager = new EventManager();
+        this.#week = new Week(this.#eventManager);
     }
 
     start() {
@@ -21,17 +21,11 @@ class Calendar {
     #updateArrow() {
         this.#date = new Date();
         
-        const arrowPosition = this.#getCurrentSecondsInPercentage();
+        const arrowPosition = getCurrentSecondsInPercentage(this.#date);
         this.#arrow.setArrowPosition(arrowPosition);
     }
 
-    #getCurrentSecondsInPercentage() {
-        const FULL_DAY_IN_SECONDS = 3600 * 24;
-        
-        let seconds = this.#date.getSeconds();
-        let minutesInSeconds = this.#date.getMinutes() * 60;
-        let hoursInSeconds = this.#date.getHours() * 3600;
-
-        return ((hoursInSeconds + minutesInSeconds + seconds) / FULL_DAY_IN_SECONDS) * 100;
-    }
 }
+
+
+// let event = new Event("Test", "Test", new Date(2025, 5, 30, 14, 30), new Date(2025, 5, 30, 15, 30))

@@ -4,11 +4,15 @@ class Week {
     #dayContainer;
     #dayElements;
 
-    constructor() {
+    #eventManager;
+
+    constructor(eventManager) {
         this.#weekNamesContainer = document.getElementById(WEEK_NAMES_CONTAINER);
         this.#weekDatesContainer = document.getElementById(WEEK_DATES_ID);
         this.#dayContainer = document.getElementById(DAYS_CONTAINER_ID);
         this.#dayElements = [];
+
+        this.#eventManager = eventManager;
     }
 
     build(today) {
@@ -60,34 +64,19 @@ class Week {
             const isLastDay = i == DAYS_IN_WEEK - 1;
             const day = this.#createDayElement(isCurrentDay, isLastDay);
             if (isCurrentDay) {
-                this.#createEventElement(day);
+                let event = new Event("Test", "Test", new Date(2025, 5, 30, 15, 0), new Date(2025, 5, 30, 16, 0));
+                let element = event.createElement();
+
+                element.onclick = (e) => {
+                    this.#eventManager.openDetails(event);
+                }
+                
+                day.appendChild(element);
             }
 
             this.#dayContainer.appendChild(day);
             this.#dayElements.push(day);
         }
-    }
-
-    #createEventElement(dayContainer) {
-        let element = document.createElement("button");
-
-        let titleElement = document.createElement("p");
-        let title = document.createTextNode("This is test event");
-        titleElement.appendChild(title);
-
-        titleElement.classList.add("event-panel-title");
-
-        let timeElement = document.createElement("p");
-        let time = document.createTextNode("10 am - 11 am");
-        timeElement.appendChild(time);
-
-        timeElement.classList.add("event-panel-time");
-
-        element.appendChild(titleElement);
-        element.appendChild(timeElement);
-
-        element.classList.add("event-mark");
-        dayContainer.appendChild(element);
     }
 
     #createElementForWeek(day, currentDay) {

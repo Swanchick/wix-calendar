@@ -30,8 +30,6 @@ header {
     display: flex;
     top: 0;
 
-    /* background-color: var(--panel-color); */
-
     height: var(--header-height);
 
     align-items: center;
@@ -39,6 +37,10 @@ header {
 
     padding-left: 2rem;
     padding-right: 2rem;
+}
+
+textarea {
+    font-family: "Roboto", sans-serif;
 }
 
 .header-button {
