@@ -5,7 +5,7 @@ class Calendar {
     #eventManager;
 
     constructor() {
-        this.#date = new Date();
+        this.#date = new Date(2025, 0, 1);
         this.#arrow = new Arrow();
         this.#eventManager = new EventManager();
         this.#week = new Week(this.#eventManager);

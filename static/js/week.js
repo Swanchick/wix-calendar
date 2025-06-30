@@ -44,14 +44,15 @@ class Week {
         }
         
         const weekDays = this.#getWeek(year, month, currentDayInMonth, currentDayInWeek);
-        console.log(weekDays);
 
         for (let i = 0; i < weekDays.length; i++) {
             let dayInMonth = weekDays[i];
 
-            const dayElement = this.#createWeekDayElement(dayInMonth, i, currentDayInWeek);
+            const dayElement = this.#createWeekDayElement(dayInMonth.getDate(), i, currentDayInWeek);
             this.#weekDatesContainer.appendChild(dayElement);
         }
+
+        return weekDays;
     }
 
     #buildDays(currentDayInWeek) {
@@ -177,22 +178,40 @@ class Week {
 
         const firstDay = currentDayInMonth - currentDayInWeek;
         const prevMonth = this.#getPreviousMonth(month);
-        const prevMonthDays = this.#getMonthDays((prevMonth === 12) ? year - 1 : year, prevMonth);
+        const prevYear = year - 1;
+
+        console.log(prevMonth);
+        const prevMonthDays = this.#getMonthDays((prevMonth === 11) ? prevYear : year, prevMonth);
 
         const nextMonth = this.#getNextMonth(month);
-        const nextMonthDays = this.#getMonthDays((nextMonth === 0) ? year + 1 : year, nextMonth);
+        const nextYear = year + 1;
+        const nextMonthDays = this.#getMonthDays((nextMonth === 0) ? nextYear : year, nextMonth);
+
+
         for (let i = 0; i < DAYS_IN_WEEK; i++) {
             let actualDay = firstDay + i;
+            let actualMonth = month;
+            let actualYear = year;
 
             if (actualDay < 1) {
                 actualDay = prevMonthDays - Math.abs(actualDay);
+                actualMonth = prevMonth;
+                
+                if (prevMonth === 11) {
+                    actualYear = prevYear;
+                }
             }
 
             if (actualDay > currentMonthDays) {
                 actualDay = (actualDay % nextMonthDays) + 1;
+                actualMonth = nextMonth;
+
+                if (nextMonth === 0) {
+                    actualYear = nextYear;
+                }
             }
 
-            days.push(actualDay);
+            days.push(new Date(actualYear, actualMonth, actualDay));
         }
 
         return days;
