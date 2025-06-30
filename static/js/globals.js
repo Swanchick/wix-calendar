@@ -10,6 +10,20 @@ const EVENT_FORM_ID = "event-form";
 const EVENT_DETAILS_ID = "event-details";
 
 
+// Form element ids
+const FORM_TITLE_ID = "event-title";
+const FORM_TITLE_WARNING_ID = "title-warning";
+
+const FORM_DESCRIPTION_ID = "event-description";
+const FORM_DESCRIPTION_WARNING_ID = "description-warning";
+
+const FORM_START_TIME_ID = "event-start-time";
+const FORM_STAR_TIME_WARNING_ID = "start-time-warning";
+
+const FORM_END_TIME_ID = "event-end-time";
+const FORM_END_TIME_WARNING_ID = "end-time-warning";
+
+
 const DAY_NAMES = [
     "SUN",
     "MON",

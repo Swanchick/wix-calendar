@@ -16,10 +16,10 @@ class EventManager {
     #windowState;
 
     #events;
-    
+
     constructor() {
         this.#windowState = WINDOW_STATE.CLOSED;
-        
+
         this.#eventWindow = document.getElementById(EVENT_WINDOW_ID);
         this.#eventButton = document.getElementById(OPEN_EVENT_WINDOW_ID);
 
@@ -33,7 +33,11 @@ class EventManager {
             e.preventDefault();
 
             if (this.#windowState != WINDOW_STATE.CLOSED) {
-                this.#closeWindow();
+                const validationResult = this.#validateForm();
+
+                if (validationResult) {
+                    this.#closeWindow();
+                }
             }
         }
 
@@ -61,6 +65,60 @@ class EventManager {
         this.#eventForm.classList.remove("hidden");
 
         this.#windowState = WINDOW_STATE.FORM;
+    }
+
+    #validateForm() {
+        let isValid = true;
+        
+        const formTitle = document.getElementById(FORM_TITLE_ID);
+        const formTitleWarning = document.getElementById(FORM_TITLE_WARNING_ID);
+
+        if (formTitle.value == "") {
+            formTitleWarning.classList.remove("hidden");
+            
+            isValid = false;
+        }
+
+        console.log("Title: ");
+        console.log(formTitle.value);
+
+        const formDescription = document.getElementById(FORM_DESCRIPTION_ID);
+        const formDescriptionWarning = document.getElementById(FORM_DESCRIPTION_WARNING_ID);
+
+        if (formDescription.value == "") {
+            formDescriptionWarning.classList.remove("hidden");
+
+            isValid = false;
+        }
+
+        console.log("Description: ");
+        console.log(formDescription.value);
+
+        const formStartTime = document.getElementById(FORM_START_TIME_ID);
+        const formStartTimeWarning = document.getElementById(FORM_STAR_TIME_WARNING_ID);
+
+        if (formStartTime.value == "") {
+            formStartTimeWarning.classList.remove("hidden");
+
+            isValid = false;
+        }
+
+        console.log("Start time: ");
+        console.log(formStartTime.value);
+
+        const formEndTime = document.getElementById(FORM_END_TIME_ID);
+        const formEndtimeWarning = document.getElementById(FORM_END_TIME_WARNING_ID);
+
+        if (formEndTime.value == "") {
+            formEndtimeWarning.classList.remove("hidden");
+
+            isValid = false;
+        }
+
+        console.log("End time: ");
+        console.log(typeof formEndTime.value);
+
+        return isValid;
     }
 
     openDetails(dateKey) {
