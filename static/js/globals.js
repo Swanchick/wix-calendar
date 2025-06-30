@@ -6,6 +6,9 @@ const EVENT_WINDOW_ID = "event-window";
 const OPEN_EVENT_WINDOW_ID = "open-event-window";
 const CREATE_EVENT_BUTTON = "create-event-button";
 const CLOSE_EVENT_BUTTON = "close-event-button";
+const EVENT_FORM_ID = "event-form";
+const EVENT_DETAILS_ID = "event-details";
+
 
 const DAY_NAMES = [
     "SUN",

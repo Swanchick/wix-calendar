@@ -222,7 +222,6 @@ button:hover {
     color: var(--current-day-color);
 }
 
-
 .event-window {
     display: flex;
     justify-content: center;
@@ -241,7 +240,7 @@ button:hover {
     display: none !important;
 }
 
-.event-form {
+.event-menu {
     background-color: white;
     padding: 2rem;
 
