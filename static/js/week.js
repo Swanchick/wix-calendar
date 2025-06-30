@@ -22,8 +22,8 @@ class Week {
         const currentDayInMonth = today.getDate();
 
         this.#buildWeekNames(currentDayInWeek);
-        this.#buildWeekDays(year, month, currentDayInMonth, currentDayInWeek);
-        this.#buildDays(currentDayInWeek);
+        const weekDays = this.#buildWeekDays(year, month, currentDayInMonth, currentDayInWeek);
+        this.#buildDays(currentDayInWeek, weekDays);
         
     }
 
@@ -55,7 +55,7 @@ class Week {
         return weekDays;
     }
 
-    #buildDays(currentDayInWeek) {
+    #buildDays(currentDayInWeek, weekDays) {
         if (this.#dayContainer == null) {
             return;
         }
@@ -64,15 +64,17 @@ class Week {
             const isCurrentDay = i == currentDayInWeek;
             const isLastDay = i == DAYS_IN_WEEK - 1;
             const day = this.#createDayElement(isCurrentDay, isLastDay);
-            if (isCurrentDay) {
-                let event = new Event("Test", "Test", new Date(2025, 5, 30, 15, 0), new Date(2025, 5, 30, 16, 0));
-                let element = event.createElement();
+            
+            const events = this.#eventManager.getTodayEvents(weekDays[i]);
+            if (events !== undefined) {
+                events.forEach((e) => {
+                    const element = e.createElement();
+                    element.onclick = (_) => {
+                        this.#eventManager.openDetails(e);
+                    }
 
-                element.onclick = (e) => {
-                    this.#eventManager.openDetails(event);
-                }
-                
-                day.appendChild(element);
+                    day.appendChild(element);
+                });
             }
 
             this.#dayContainer.appendChild(day);

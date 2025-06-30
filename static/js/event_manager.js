@@ -168,16 +168,8 @@ class EventManager {
     }
 
     getTodayEvents(date) {
-        let events = [];
-        
         const dayString = this.dateToKey(date);
 
-        this.#events.forEach((eventSlot) => {
-            if (eventSlot.isToday(dayString)) {
-                events.push(eventSlot.getEvent());
-            }
-        });
-
-        return events;
+        return this.#events[dayString];
     }
 }
