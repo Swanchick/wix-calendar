@@ -78,57 +78,133 @@ class EventManager {
     }
 
     #validateForm() {
-        let isValid = true;
-        
         const formTitle = document.getElementById(FORM_TITLE_ID);
-        const formTitleWarning = document.getElementById(FORM_TITLE_WARNING_ID);
-
-        if (formTitle.value == "") {
-            formTitleWarning.classList.remove("hidden");
-            
-            isValid = false;
-        }
-
-        console.log("Title: ");
-        console.log(formTitle.value);
+        const validation1 = this.#validateTextFields(FORM_TITLE_WARNING_ID, formTitle.value);
 
         const formDescription = document.getElementById(FORM_DESCRIPTION_ID);
-        const formDescriptionWarning = document.getElementById(FORM_DESCRIPTION_WARNING_ID);
-
-        if (formDescription.value == "") {
-            formDescriptionWarning.classList.remove("hidden");
-
-            isValid = false;
-        }
-
-        console.log("Description: ");
-        console.log(formDescription.value);
+        const validation2 = this.#validateTextFields(FORM_DESCRIPTION_WARNING_ID, formDescription.value);
 
         const formStartTime = document.getElementById(FORM_START_TIME_ID);
-        const formStartTimeWarning = document.getElementById(FORM_STAR_TIME_WARNING_ID);
-
-        if (formStartTime.value == "") {
-            formStartTimeWarning.classList.remove("hidden");
-
-            isValid = false;
-        }
-
-        console.log("Start time: ");
-        console.log(formStartTime.value);
+        const validation3 = this.#validateDate(FORM_START_TIME_WARNING_ID, formStartTime.value);
 
         const formEndTime = document.getElementById(FORM_END_TIME_ID);
-        const formEndtimeWarning = document.getElementById(FORM_END_TIME_WARNING_ID);
+        const validation4 = this.#validateDate(FORM_END_TIME_WARNING_ID, formEndTime.value);
 
-        if (formEndTime.value == "") {
-            formEndtimeWarning.classList.remove("hidden");
-
-            isValid = false;
+        if (!(validation1 && validation2 && validation3 && validation4)) {
+            return false;
         }
 
-        console.log("End time: ");
-        console.log(typeof formEndTime.value);
+        const startDate = new Date(formStartTime.value);
+        const endDate = new Date(formEndTime.value);
 
-        return isValid;
+        const dateValidation = this.#validateSameDates(startDate, endDate);
+        if (!dateValidation) {
+            return false
+        }
+
+        const endDateValidation = this.#validateEndTime(startDate, endDate);
+        if (!endDateValidation) {
+            return false;
+        }
+
+        return dateValidation;
+    }
+
+    #validateTextFields(warningId, text) {
+        if (text === "") {
+            this.#showWarning(warningId, "This field requires input data!");
+            
+            return false;
+        }
+        
+        return true;
+    }
+
+    #validateSameDates(startDate, endDate) {
+        if (this.dateToKey(startDate) != this.dateToKey(endDate)) {
+            this.#showWarning(FORM_START_TIME_WARNING_ID, "Date forms should be in the same day!");
+            this.#showWarning(FORM_END_TIME_WARNING_ID, "Date forms should be in the same day!");
+            
+            return false;
+        }
+
+        return true;
+    }
+
+    #validateDate(warningId, dateStr) {
+        const date = new Date(dateStr);
+        
+        if (Number.isNaN(date.valueOf())) {
+            this.#showWarning(warningId, "This date field is not valid!");
+            
+            return false;
+        }
+
+        return true;
+    }
+
+    #validateEndTime(startDate, endDate) {
+        const startDateInPercantage = getCurrentSecondsInPercentage(startDate);
+        const endDateInPercantage = getCurrentSecondsInPercentage(endDate);
+
+        if (endDateInPercantage < startDateInPercantage) {
+            this.#showWarning(FORM_END_TIME_WARNING_ID, "This field need to have time after the start date!");
+
+            return false;
+        }
+
+        return true;
+    }
+
+    #createEvent(title, description, startDate, endDate) {
+
+    }
+
+    #resetAllInputs() {
+        const inputIds = [
+            FORM_TITLE_ID,
+            FORM_DESCRIPTION_ID,
+            FORM_START_TIME_ID,
+            FORM_END_TIME_ID
+        ];
+
+        inputIds.forEach((inputId) => {
+            let element = document.getElementById(inputId);
+            if (element !== null) {
+                element.value = "";
+            }
+        });
+    }
+
+    #resetAllWarnings() {
+        const warningIds = [
+            FORM_TITLE_WARNING_ID, 
+            FORM_DESCRIPTION_WARNING_ID, 
+            FORM_START_TIME_WARNING_ID, 
+            FORM_END_TIME_WARNING_ID
+        ];
+
+        warningIds.forEach((id) => {
+            const element = document.getElementById(id);
+
+            if (!element.classList.contains("hidden")) {
+                element.classList.add("hidden");
+            }
+        });
+    }
+
+    #showWarning(warningId, message) {
+        const warningElement = document.getElementById(warningId);
+
+        if (warningElement == null) {
+            return;
+        }
+
+        if (warningElement.classList.contains("hidden")) {
+            warningElement.classList.remove("hidden");
+        }
+
+        warningElement.textContent = message;
     }
 
     openDetails(event) {
@@ -148,6 +224,9 @@ class EventManager {
     }
 
     #closeWindow() {
+        this.#resetAllInputs();
+        this.#resetAllWarnings();
+        
         if (!this.#eventForm.classList.contains("hidden")) {
             this.#eventForm.classList.add("hidden");
         }
@@ -157,7 +236,6 @@ class EventManager {
         }
 
         this.#eventWindow.classList.add("hidden");
-
         this.#windowState = WINDOW_STATE.CLOSED;
     }
 
