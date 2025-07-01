@@ -14,7 +14,7 @@ class EventManager {
     private closeButton: HTMLElement | null = document.getElementById(CLOSE_EVENT_BUTTON);
 
     private windowState: WindowState = WindowState.CLOSED;
-    private events: Array<WixEvent> = [];
+    private events: Map<string, Array<WixEvent>> = new Map();
 
     constructor() {
         this.eventWindow!.onclick = (e) => {
@@ -43,9 +43,12 @@ class EventManager {
                 this.closeWindow();
             }
         }
+
+        const data = this.loadEventsFromStorage();
+        this.loadEvents(data);
     }
 
-    private loadEventsFromStorage(): Map<string, IEventStorage> {
+    private loadEventsFromStorage(): Map<string, Array<IEventStorage>> {
         const dataString = localStorage.getItem(EVENT_LOCAL_STORAGE);
         if (dataString == null) {
             localStorage.setItem(EVENT_LOCAL_STORAGE, "{}");
@@ -53,8 +56,34 @@ class EventManager {
             return new Map();
         }
 
-        const data: Map<string, IEventStorage> = JSON.parse(dataString);
+        const data: Map<string, Array<IEventStorage>> = JSON.parse(dataString);
         return data;
+    }
+
+    private loadEvents(data: Map<string, Iterable<IEventStorage>>) {
+        for (const key of data.keys()) {
+            const events: Iterable<IEventStorage> | undefined = data.get(key);
+            if (events === undefined) {
+                continue;
+            }
+
+            for (const eventStracture of events) {
+                const event = eventStracture as WixEvent;
+
+                this.addEvent(event);   
+            }
+        }
+    }
+
+    private addEvent(event: WixEvent) {
+        const startDate = event.startDate;
+        const startDateString = this.dateToKey(startDate);
+        
+        if (this.events.get(startDateString) === undefined) {
+            this.events.set(startDateString, []);
+        }
+
+        this.events.get(startDateString)!.push(event);
     }
 
     private closeWindow() {
@@ -65,45 +94,14 @@ class EventManager {
         return true;
     }
 
-
+    private dateToKey(date: Date) {
+        return `${date.getFullYear()}:${date.getMonth()}:${date.getDate()}`;
+    }
 
     onFormSuccess() {}
 }
 
 
-//     constructor() {
-//         this.#events = {};
-
-//         const data = this.#loadFromLocalStorage();
-//         this.#loadEvents(data);
-//     }
-
-//     #loadFromLocalStorage() {
-//         const events = localStorage.getItem(EVENT_LOCAL_STORAGE);
-
-//         if (events === null) {
-//             localStorage.setItem(EVENT_LOCAL_STORAGE, "{}");
-//             return {};
-//         }
-
-//         return JSON.parse(events);
-//     }
-
-//     #loadEvents(data) {
-//         Object.keys(data).forEach((dateKey) => {
-//             const events = data[dateKey];
-//             events.forEach((eventJson) => {
-//                 const event = new Event(
-//                     eventJson.title, 
-//                     eventJson.description, 
-//                     new Date(eventJson.startDate), 
-//                     new Date(eventJson.endDate)
-//                 );
-
-//                 this.addEvent(event);
-//             });
-//         });
-//     }
 
 //     #saveEvent(event) {
 //         const eventData = event.getJson();
@@ -120,7 +118,6 @@ class EventManager {
 //         localStorage.setItem(EVENT_LOCAL_STORAGE, JSON.stringify(data));
 //     } 
 
-//     onFormSuccess() {}
 
 //     #openForm() {
 //         this.#eventWindow.classList.remove("hidden");
@@ -293,17 +290,6 @@ class EventManager {
 
 //     dateToKey(date) {
 //         return `${date.getFullYear()}:${date.getMonth()}:${date.getDate()}`;
-//     }
-    
-//     addEvent(event) {
-//         const startDate = event.getStartDate();
-//         const startDateString = this.dateToKey(startDate);
-        
-//         if (this.#events[startDateString] === undefined) {
-//             this.#events[startDateString] = [];
-//         }
-
-//         this.#events[startDateString].push(event);
 //     }
 
 //     getTodayEvents(date) {
