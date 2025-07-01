@@ -16,14 +16,6 @@ class Calendar {
 
             this.#arrow = new Arrow();
         };
-
-        let event1 = new Event("Test 1", "Test", new Date(2025, 5, 30, 8, 0), new Date(2025, 5, 30, 9, 0));
-        let event2 = new Event("Test 2", "Test", new Date(2025, 5, 30, 15, 0), new Date(2025, 5, 30, 16, 0));
-        let event3 = new Event("Test 3", "Test", new Date(2025, 6, 1, 12, 0), new Date(2025, 6, 1, 13, 0));
-
-        this.#eventManager.addEvent(event1);
-        this.#eventManager.addEvent(event2);
-        this.#eventManager.addEvent(event3);
     }
 
     start() {

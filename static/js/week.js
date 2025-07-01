@@ -196,8 +196,6 @@ class Week {
         const firstDay = currentDayInMonth - currentDayInWeek;
         const prevMonth = this.#getPreviousMonth(month);
         const prevYear = year - 1;
-
-        console.log(prevMonth);
         const prevMonthDays = this.#getMonthDays((prevMonth === 11) ? prevYear : year, prevMonth);
 
         const nextMonth = this.#getNextMonth(month);

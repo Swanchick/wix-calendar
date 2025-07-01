@@ -71,4 +71,15 @@ class Event {
 
         return element;
     }
+
+    getJson() {
+        const data = {
+            title: this.#title,
+            description: this.#description,
+            startDate: this.#startDate.toString(),
+            endDate: this.#endTime.toString()
+        };
+
+        return data;
+    }
 }

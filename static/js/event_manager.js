@@ -69,7 +69,52 @@ class EventManager {
         }
 
         this.#events = {};
+
+        const data = this.#loadFromLocalStorage();
+        this.#loadEvents(data);
     }
+
+    #loadFromLocalStorage() {
+        const events = localStorage.getItem(EVENT_LOCAL_STORAGE);
+
+        if (events === null) {
+            localStorage.setItem(EVENT_LOCAL_STORAGE, "{}");
+            return {};
+        }
+
+        return JSON.parse(events);
+    }
+
+    #loadEvents(data) {
+        Object.keys(data).forEach((dateKey) => {
+            const events = data[dateKey];
+            events.forEach((eventJson) => {
+                const event = new Event(
+                    eventJson.title, 
+                    eventJson.description, 
+                    new Date(eventJson.startDate), 
+                    new Date(eventJson.endDate)
+                );
+
+                this.addEvent(event);
+            });
+        });
+    }
+
+    #saveEvent(event) {
+        const eventData = event.getJson();
+        const data = this.#loadFromLocalStorage();
+        const dateKey = this.dateToKey(event.getStartDate());
+
+        if (data[dateKey] === undefined) {
+            data[dateKey] = [];
+        }
+
+        data[dateKey].push(eventData);
+
+        console.log(data);
+        localStorage.setItem(EVENT_LOCAL_STORAGE, JSON.stringify(data));
+    } 
 
     onFormSuccess() {}
 
@@ -112,6 +157,7 @@ class EventManager {
 
         const event = new Event(formTitle.value, formDescription.value, startDate, endDate);
         this.addEvent(event);
+        this.#saveEvent(event);
 
         return true;
     }

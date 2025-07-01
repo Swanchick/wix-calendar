@@ -1,3 +1,6 @@
+const EVENT_LOCAL_STORAGE = "wix-calendar-events";
+
+
 const WEEK_DATES_ID = "week-dates";
 const DAYS_CONTAINER_ID = "days-container";
 const ARROW_ID = "arrow";
