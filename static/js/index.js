@@ -1,7 +1,4 @@
-let calendar = null; 
-
-
-window.onload = (_) => {
-    calendar = new Calendar();
-    calendar.start();
-}
+"use strict";
+window.onclick = (e) => {
+    console.log("Hello World");
+};
