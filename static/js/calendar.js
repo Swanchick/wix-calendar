@@ -16,6 +16,9 @@ class Calendar {
 
             this.#arrow = new Arrow();
         };
+
+        const currentDateElement = document.getElementById(CURRENT_DATE_ID);
+        currentDateElement.textContent = `${MONTH_NAMES[this.#date.getMonth()]} ${this.#date.getFullYear()}`
     }
 
     start() {

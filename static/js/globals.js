@@ -12,6 +12,8 @@ const CLOSE_EVENT_BUTTON = "close-event-button";
 const EVENT_FORM_ID = "event-form";
 const EVENT_DETAILS_ID = "event-details";
 
+const CURRENT_DATE_ID = "current-date";
+
 // Detail element ids 
 const DETAILS_TITLE_ID = "event-details-title";
 const DETAILS_TIMES_ID = "event-details-times";
@@ -56,6 +58,21 @@ const MONTHS = [
     30, // November
     31, // December
 ]
+
+const MONTH_NAMES = {
+    0: "January",
+    1: "February",
+    2: "March",
+    3: "April",
+    4: "May",
+    5: "June",
+    6: "July",
+    7: "August",
+    8: "September",
+    9: "October",
+    10: "November",
+    11: "December"
+}
 
 const ALL_MONTHS = 12;
 
