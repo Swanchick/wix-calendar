@@ -3,14 +3,16 @@ class Week {
     #weekDatesContainer;
     #dayContainer;
     #dayElements;
+    #today;
 
     #eventManager;
 
-    constructor(eventManager) {
+    constructor(eventManager, today) {
         this.#weekNamesContainer = document.getElementById(WEEK_NAMES_CONTAINER);
         this.#weekDatesContainer = document.getElementById(WEEK_DATES_ID);
         this.#dayContainer = document.getElementById(DAYS_CONTAINER_ID);
         this.#dayElements = [];
+        this.#today = today;
 
         this.#eventManager = eventManager;
     }
@@ -20,46 +22,45 @@ class Week {
         const month = today.getMonth();
         const currentDayInWeek = today.getDay();
         const currentDayInMonth = today.getDate();
-
+        
         this.#buildWeekNames(currentDayInWeek);
         const weekDays = this.#buildWeekDays(year, month, currentDayInMonth, currentDayInWeek);
         this.#buildDays(currentDayInWeek, weekDays);
-        
     }
-
+    
     #buildWeekNames(currentDayInWeek) {
         if (this.#weekNamesContainer == null) {
             return;
         }
-
+        
         for (let i = 0; i < DAYS_IN_WEEK; i++) {
             const weekNameElement = this.#createWeekNameElement(i, currentDayInWeek);
             this.#weekNamesContainer.appendChild(weekNameElement);
         }
     }
-
+    
     #buildWeekDays(year, month, currentDayInMonth, currentDayInWeek) {
         if (this.#weekDatesContainer == null) {
             return;
         }
         
         const weekDays = this.#getWeek(year, month, currentDayInMonth, currentDayInWeek);
-
+        
         for (let i = 0; i < weekDays.length; i++) {
             let dayInMonth = weekDays[i];
-
+            
             const dayElement = this.#createWeekDayElement(dayInMonth.getDate(), i, currentDayInWeek);
             this.#weekDatesContainer.appendChild(dayElement);
         }
-
+        
         return weekDays;
     }
-
+    
     #buildDays(currentDayInWeek, weekDays) {
         if (this.#dayContainer == null) {
             return;
         }
-
+        
         for (let i = 0; i < DAYS_IN_WEEK; i++) {
             const isCurrentDay = i == currentDayInWeek;
             const isLastDay = i == DAYS_IN_WEEK - 1;
@@ -72,16 +73,30 @@ class Week {
                     element.onclick = (_) => {
                         this.#eventManager.openDetails(e);
                     }
-
+                    
                     day.appendChild(element);
                 });
             }
-
+            
             this.#dayContainer.appendChild(day);
             this.#dayElements.push(day);
         }
     }
 
+    clearAll() {
+        Array.from(this.#weekNamesContainer.children).forEach((child) => {
+            this.#weekNamesContainer.removeChild(child);
+        });
+
+        Array.from(this.#weekDatesContainer.children).forEach((child) => {
+            this.#weekDatesContainer.removeChild(child);
+        });
+
+        Array.from(this.#dayContainer.children).forEach((child) => {
+            this.#dayContainer.removeChild(child);
+        });
+    }
+    
     #createElementForWeek(day, currentDay) {
         const element = document.createElement("h2");
         

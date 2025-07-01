@@ -46,6 +46,7 @@ class EventManager {
                 const validationResult = this.#validateForm();
 
                 if (validationResult) {
+                    this.onFormSuccess();
                     this.#closeWindow();
                 }
             }
@@ -61,7 +62,7 @@ class EventManager {
         
         this.#eventButton.onclick = (_) => {
             if (this.#windowState == WINDOW_STATE.CLOSED) {
-                this.#openForm("asda");
+                this.#openForm();
             } else {
                 this.#closeWindow();
             }
@@ -69,6 +70,8 @@ class EventManager {
 
         this.#events = {};
     }
+
+    onFormSuccess() {}
 
     #openForm() {
         this.#eventWindow.classList.remove("hidden");
@@ -107,7 +110,10 @@ class EventManager {
             return false;
         }
 
-        return dateValidation;
+        const event = new Event(formTitle.value, formDescription.value, startDate, endDate);
+        this.addEvent(event);
+
+        return true;
     }
 
     #validateTextFields(warningId, text) {
@@ -154,10 +160,6 @@ class EventManager {
         }
 
         return true;
-    }
-
-    #createEvent(title, description, startDate, endDate) {
-
     }
 
     #resetAllInputs() {
