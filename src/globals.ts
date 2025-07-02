@@ -41,7 +41,7 @@ const DAY_NAMES = [
     "WED",
     "THU",
     "FRI",
-    "SAT"
+    "SAT",
 ];
 
 const DAYS_IN_WEEK = 7;
@@ -58,11 +58,11 @@ const MONTHS = [
     new Month("September", 30),
     new Month("October", 31),
     new Month("November", 30),
-    new Month("December", 31)
+    new Month("December", 31),
 ];
 
 const ALL_MONTHS = 12;
-
+const ONE_HOUR_IN_PERCENTAGE = 4.166666666666666;
 
 function getCurrentSecondsInPercentage(date: Date): number {
     const HOURS_IN_DAY = 24;

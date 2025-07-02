@@ -35,7 +35,4 @@ class WixEvent {
         element.style.height = `${endInPercentage - startInPercentage}%`;
         return element;
     }
-    get json() {
-        return this;
-    }
 }

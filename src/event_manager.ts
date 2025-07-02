@@ -1,8 +1,27 @@
 enum WindowState {
     CLOSED,
     FORM,
-    DETAILS
+    DETAILS,
 }
+
+/// Todo:
+/// loadFromLocalStorage +
+/// loadEvents +
+/// saveEvents +
+/// openForm +
+/// validateForm +
+/// validateTextFields +
+/// validateSameDates +
+/// validateDate +
+/// validateEndDate +
+/// resetAllInputs +
+/// resetAllWarnings +
+/// showWarning +
+/// openDetails +
+/// closeWindow +
+/// dateToKeys +
+/// addEvent +
+/// getTodayEvents +
 
 class EventManager {
     private eventWindow: HTMLElement | null = document.getElementById(EVENT_WINDOW_ID);
@@ -10,8 +29,8 @@ class EventManager {
     private eventDetails: HTMLElement | null = document.getElementById(EVENT_DETAILS_ID);
 
     private eventButton: HTMLElement | null = document.getElementById(OPEN_EVENT_WINDOW_ID);
-    private createButton: HTMLElement | null = document.getElementById(CREATE_EVENT_BUTTON);
-    private closeButton: HTMLElement | null = document.getElementById(CLOSE_EVENT_BUTTON);
+    private createButton: HTMLElement | null = document.getElementById(CREATE_EVENT_BUTTON_ID);
+    private closeButton: HTMLElement | null = document.getElementById(CLOSE_EVENT_BUTTON_ID);
 
     private windowState: WindowState = WindowState.CLOSED;
     private events: Map<string, Array<WixEvent>> = new Map();
@@ -40,6 +59,14 @@ class EventManager {
         this.closeButton!.onclick = (e) => {
             e.preventDefault();
             if (this.windowState !== WindowState.CLOSED) {
+                this.closeWindow();
+            }
+        }
+
+        this.eventButton!.onclick = (_) => {
+            if (this.windowState === WindowState.CLOSED) {
+                this.openForm();
+            } else {
                 this.closeWindow();
             }
         }
@@ -75,6 +102,21 @@ class EventManager {
         }
     }
 
+    private saveEvent(event: WixEvent) {
+        const data = this.loadEventsFromStorage();
+        const dateKey = this.dateToKey(event.startDate);
+
+        let events = data.get(dateKey);
+        if (events === undefined) {
+            events = [];
+        }
+
+        events.push(event as IEventStorage);
+        data.set(dateKey, events);
+
+        localStorage.setItem(EVENT_LOCAL_STORAGE, JSON.stringify(data));
+    }
+
     private addEvent(event: WixEvent) {
         const startDate = event.startDate;
         const startDateString = this.dateToKey(startDate);
@@ -86,11 +128,186 @@ class EventManager {
         this.events.get(startDateString)!.push(event);
     }
 
-    private closeWindow() {
+    private resetAllInputs() {
+        const inputIds = [
+            FORM_TITLE_ID,
+            FORM_DESCRIPTION_ID,
+            FORM_START_TIME_ID,
+            FORM_END_TIME_ID,
+        ];
 
+        for (const id of inputIds) {
+            const element = document.getElementById(id);
+            if (element === null || !(element instanceof HTMLInputElement)) {
+                continue;
+            }
+
+            element.value = "";
+        }
+    }
+
+    private resetAllWarnings() {
+        const warningIds = [
+            FORM_TITLE_WARNING_ID,
+            FORM_DESCRIPTION_WARNING_ID,
+            FORM_START_TIME_WARNING_ID,
+            FORM_END_TIME_WARNING_ID,
+        ];
+
+        for (const id of warningIds) {
+            const element = document.getElementById(id);
+            if (element === null || element.classList.contains("hidden")) {
+                return;
+            }
+
+            element.classList.add("hidden");
+        }
+    }
+
+    private showWarning(warningId: string, message: string) {
+        const element = document.getElementById(warningId);
+        if (element === null) {
+            return;
+        }
+
+        if (element.classList.contains("hidden")) {
+            element.classList.remove("hidden");
+        }
+
+        element.textContent = message;
+    }
+
+    private closeWindow() {
+        this.resetAllInputs();
+        this.resetAllWarnings();
+
+        const eventForm = this.eventForm;
+        if (eventForm !== null && eventForm.classList.contains("hidden")) {
+            eventForm.classList.add("hidden");
+        }
+
+        const eventDetails = this.eventDetails;
+        if (eventDetails !== null && !eventDetails.classList.contains("hidden")) {
+            eventDetails.classList.add("hidden");
+        }
+
+        this.windowState = WindowState.CLOSED;
+
+        this.eventWindow?.classList.add("hidden");
+        this.windowState = WindowState.CLOSED;
+    }
+
+    private openForm() {
+        this.eventWindow?.classList.remove("hidden");
+        this.eventForm?.classList.remove("hidden");
+
+        this.windowState = WindowState.FORM;
+    }
+
+    private openDetails() {
+        this.eventWindow?.classList.remove("hidden");
+        this.eventDetails?.classList.remove("hidden");
+
+        this.windowState = WindowState.DETAILS;
     }
 
     private validateForm(): boolean {
+        const formTitle = document.getElementById(FORM_TITLE_ID);
+        if (formTitle === undefined || !(formTitle instanceof HTMLInputElement)) {
+            return false;
+        }
+        
+        const validateTitle = this.validateTextFields(FORM_TITLE_WARNING_ID, formTitle.value);
+
+        const formDescription = document.getElementById(FORM_DESCRIPTION_ID);
+        if (formDescription === undefined || !(formDescription instanceof HTMLInputElement)) {
+            return false;
+        }
+
+        const validateDescription = this.validateTextFields(FORM_DESCRIPTION_WARNING_ID, formDescription.value);
+
+        const formStartDate = document.getElementById(FORM_START_TIME_ID);
+        if (formStartDate === undefined || !(formStartDate instanceof HTMLInputElement)) {
+            return false;
+        }
+
+        const validateStartDate = this.validateDate(FORM_START_TIME_WARNING_ID, formStartDate.value);
+
+        const formEndDate = document.getElementById(FORM_END_TIME_ID);
+        if (formEndDate === undefined || !(formEndDate instanceof HTMLInputElement)) {
+            return false;
+        }
+        
+        const validateEndDate = this.validateDate(FORM_END_TIME_WARNING_ID, formEndDate.value);
+
+        if (!(validateTitle && validateDescription && validateStartDate && validateEndDate)) {
+            return false;
+        }
+
+        const startDate = new Date(formStartDate.value);
+        const endDate = new Date(formEndDate.value);
+
+        const validateSameDayDates = this.validateSameDates(startDate, endDate);
+        if (!validateSameDayDates) {
+            return false;
+        } 
+
+        const validateEndDateBedoreStartDate = this.validateEndDate(startDate, endDate);
+        if (!validateEndDateBedoreStartDate) {
+            return false;
+        }
+
+        const event = new WixEvent(formTitle.value, formDescription.value, startDate, endDate);
+        this.addEvent(event);
+        this.saveEvent(event);
+        
+        return true;
+    }
+
+    private validateTextFields(warningId: string, text: string): boolean {
+        if (text === "") {
+            this.showWarning(warningId, "This field requires input data");
+
+            return false;
+        }
+
+        return false;
+    }
+
+    private validateDate(warningId: string, value: string): boolean {
+        const date = new Date(value);
+        if (Number.isNaN(date.valueOf())) {
+            this.showWarning(warningId, "This date field is not valid!");
+            
+            return false;
+        }
+        
+        return true;
+    }
+
+    private validateSameDates(startDate: Date, endDate: Date): boolean {
+        if (this.dateToKey(startDate) !== this.dateToKey(endDate)) {
+            this.showWarning(FORM_START_TIME_WARNING_ID, "Date fields should be in the same date!");
+            this.showWarning(FORM_END_TIME_WARNING_ID, "Date fields should be in the same date!");
+            
+            return false;
+        }
+        
+        return true;
+    }
+
+    private validateEndDate(startDate: Date, endDate: Date): boolean {
+        const startDateInPercentage = getCurrentSecondsInPercentage(startDate);
+        const endDateInPercentage = getCurrentSecondsInPercentage(endDate);
+
+        const difference = endDateInPercentage - startDateInPercentage;
+
+        if (difference < ONE_HOUR_IN_PERCENTAGE) {
+            this.showWarning(FORM_END_TIME_WARNING_ID, "This field need to have time after the start date!");
+
+            return false;
+        }
+
         return true;
     }
 
@@ -98,203 +315,11 @@ class EventManager {
         return `${date.getFullYear()}:${date.getMonth()}:${date.getDate()}`;
     }
 
+    getTodayEvents(date: Date): Array<IEventStorage> | undefined {
+        const dateKey = this.dateToKey(date);
+
+        return this.events.get(dateKey);        
+    }
+
     onFormSuccess() {}
 }
-
-
-
-//     #saveEvent(event) {
-//         const eventData = event.getJson();
-//         const data = this.#loadFromLocalStorage();
-//         const dateKey = this.dateToKey(event.getStartDate());
-
-//         if (data[dateKey] === undefined) {
-//             data[dateKey] = [];
-//         }
-
-//         data[dateKey].push(eventData);
-
-//         console.log(data);
-//         localStorage.setItem(EVENT_LOCAL_STORAGE, JSON.stringify(data));
-//     } 
-
-
-//     #openForm() {
-//         this.#eventWindow.classList.remove("hidden");
-//         this.#eventForm.classList.remove("hidden");
-
-//         this.#windowState = WINDOW_STATE.FORM;
-//     }
-
-//     #validateForm() {
-//         const formTitle = document.getElementById(FORM_TITLE_ID);
-//         const validation1 = this.#validateTextFields(FORM_TITLE_WARNING_ID, formTitle.value);
-
-//         const formDescription = document.getElementById(FORM_DESCRIPTION_ID);
-//         const validation2 = this.#validateTextFields(FORM_DESCRIPTION_WARNING_ID, formDescription.value);
-
-//         const formStartTime = document.getElementById(FORM_START_TIME_ID);
-//         const validation3 = this.#validateDate(FORM_START_TIME_WARNING_ID, formStartTime.value);
-
-//         const formEndTime = document.getElementById(FORM_END_TIME_ID);
-//         const validation4 = this.#validateDate(FORM_END_TIME_WARNING_ID, formEndTime.value);
-
-//         if (!(validation1 && validation2 && validation3 && validation4)) {
-//             return false;
-//         }
-
-//         const startDate = new Date(formStartTime.value);
-//         const endDate = new Date(formEndTime.value);
-
-//         const dateValidation = this.#validateSameDates(startDate, endDate);
-//         if (!dateValidation) {
-//             return false
-//         }
-
-//         const endDateValidation = this.#validateEndTime(startDate, endDate);
-//         if (!endDateValidation) {
-//             return false;
-//         }
-
-//         const event = new Event(formTitle.value, formDescription.value, startDate, endDate);
-//         this.addEvent(event);
-//         this.#saveEvent(event);
-
-//         return true;
-//     }
-
-//     #validateTextFields(warningId, text) {
-//         if (text === "") {
-//             this.#showWarning(warningId, "This field requires input data!");
-            
-//             return false;
-//         }
-        
-//         return true;
-//     }
-
-//     #validateSameDates(startDate, endDate) {
-//         if (this.dateToKey(startDate) != this.dateToKey(endDate)) {
-//             this.#showWarning(FORM_START_TIME_WARNING_ID, "Date forms should be in the same day!");
-//             this.#showWarning(FORM_END_TIME_WARNING_ID, "Date forms should be in the same day!");
-            
-//             return false;
-//         }
-
-//         return true;
-//     }
-
-//     #validateDate(warningId, dateStr) {
-//         const date = new Date(dateStr);
-        
-//         if (Number.isNaN(date.valueOf())) {
-//             this.#showWarning(warningId, "This date field is not valid!");
-            
-//             return false;
-//         }
-
-//         return true;
-//     }
-
-//     #validateEndTime(startDate, endDate) {
-//         const startDateInPercantage = getCurrentSecondsInPercentage(startDate);
-//         const endDateInPercantage = getCurrentSecondsInPercentage(endDate);
-
-//         if (endDateInPercantage < startDateInPercantage) {
-//             this.#showWarning(FORM_END_TIME_WARNING_ID, "This field need to have time after the start date!");
-
-//             return false;
-//         }
-
-//         return true;
-//     }
-
-//     #resetAllInputs() {
-//         const inputIds = [
-//             FORM_TITLE_ID,
-//             FORM_DESCRIPTION_ID,
-//             FORM_START_TIME_ID,
-//             FORM_END_TIME_ID
-//         ];
-
-//         inputIds.forEach((inputId) => {
-//             let element = document.getElementById(inputId);
-//             if (element !== null) {
-//                 element.value = "";
-//             }
-//         });
-//     }
-
-//     #resetAllWarnings() {
-//         const warningIds = [
-//             FORM_TITLE_WARNING_ID, 
-//             FORM_DESCRIPTION_WARNING_ID, 
-//             FORM_START_TIME_WARNING_ID, 
-//             FORM_END_TIME_WARNING_ID
-//         ];
-
-//         warningIds.forEach((id) => {
-//             const element = document.getElementById(id);
-
-//             if (!element.classList.contains("hidden")) {
-//                 element.classList.add("hidden");
-//             }
-//         });
-//     }
-
-//     #showWarning(warningId, message) {
-//         const warningElement = document.getElementById(warningId);
-
-//         if (warningElement == null) {
-//             return;
-//         }
-
-//         if (warningElement.classList.contains("hidden")) {
-//             warningElement.classList.remove("hidden");
-//         }
-
-//         warningElement.textContent = message;
-//     }
-
-//     openDetails(event) {
-//         this.#eventWindow.classList.remove("hidden");
-//         this.#eventDetails.classList.remove("hidden");
-
-//         const detailsTitle = document.getElementById(DETAILS_TITLE_ID);
-//         detailsTitle.textContent = event.getTitle();
-
-//         const detailsTimes = document.getElementById(DETAILS_TIMES_ID);
-//         detailsTimes.textContent = event.getTimeStartAndEnd();
-
-//         const detailsDescription = document.getElementById(DETAILS_DESCRIPTION_ID);
-//         detailsDescription.textContent = event.getDescription();
-
-//         this.#windowState = WINDOW_STATE.DETAILS;
-//     }
-
-//     #closeWindow() {
-//         this.#resetAllInputs();
-//         this.#resetAllWarnings();
-        
-//         if (!this.#eventForm.classList.contains("hidden")) {
-//             this.#eventForm.classList.add("hidden");
-//         }
-
-//         if (!this.#eventDetails.classList.contains("hidden")) {
-//             this.#eventDetails.classList.add("hidden");
-//         }
-
-//         this.#eventWindow.classList.add("hidden");
-//         this.#windowState = WINDOW_STATE.CLOSED;
-//     }
-
-//     dateToKey(date) {
-//         return `${date.getFullYear()}:${date.getMonth()}:${date.getDate()}`;
-//     }
-
-//     getTodayEvents(date) {
-//         const dayString = this.dateToKey(date);
-
-//         return this.#events[dayString];
-//     }
-// }

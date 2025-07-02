@@ -1,5 +1,5 @@
 class Week {
-    private weekNamesContainer: HTMLElement | null = document.getElementById(WEEK_NAMES_CONTAINER);
+    private weekNamesContainer: HTMLElement | null = document.getElementById(WEEK_NAMES_CONTAINER_ID);
     private weekDatesContainer: HTMLElement | null = document.getElementById(WEEK_DATES_ID);
     private dayContainer: HTMLElement | null = document.getElementById(DAYS_CONTAINER_ID);
     private dayElements: Array<HTMLElement> = [];

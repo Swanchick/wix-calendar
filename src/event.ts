@@ -2,7 +2,7 @@ interface IEventStorage {
     title: string,
     description: string,
     startDate: Date,
-    endDate: Date
+    endDate: Date,
 }
 
 class WixEvent implements IEventStorage {
@@ -59,9 +59,5 @@ class WixEvent implements IEventStorage {
         element.style.height = `${endInPercentage - startInPercentage}%`;
 
         return element;
-    }
-
-    get json(): IEventStorage {
-        return this as IEventStorage;
     }
 }

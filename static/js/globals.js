@@ -3,11 +3,11 @@ const EVENT_LOCAL_STORAGE = "wix-calendar-events";
 const WEEK_DATES_ID = "week-dates";
 const DAYS_CONTAINER_ID = "days-container";
 const ARROW_ID = "arrow";
-const WEEK_NAMES_CONTAINER = "week-names-container";
+const WEEK_NAMES_CONTAINER_ID = "week-names-container";
 const EVENT_WINDOW_ID = "event-window";
 const OPEN_EVENT_WINDOW_ID = "open-event-window";
-const CREATE_EVENT_BUTTON = "create-event-button";
-const CLOSE_EVENT_BUTTON = "close-event-button";
+const CREATE_EVENT_BUTTON_ID = "create-event-button";
+const CLOSE_EVENT_BUTTON_ID = "close-event-button";
 const EVENT_FORM_ID = "event-form";
 const EVENT_DETAILS_ID = "event-details";
 const CURRENT_DATE_ID = "current-date";
@@ -29,41 +29,28 @@ const DAY_NAMES = [
     "WED",
     "THU",
     "FRI",
-    "SAT"
+    "SAT",
 ];
-const MONTHS = [
-    31,
-    0,
-    31,
-    30,
-    31,
-    30,
-    31,
-    31,
-    30,
-    31,
-    30,
-    31,
-];
-const MONTH_NAMES = {
-    0: "January",
-    1: "February",
-    2: "March",
-    3: "April",
-    4: "May",
-    5: "June",
-    6: "July",
-    7: "August",
-    8: "September",
-    9: "October",
-    10: "November",
-    11: "December"
-};
-const ALL_MONTHS = 12;
 const DAYS_IN_WEEK = 7;
-const HOURS_IN_DAY = 25;
+const MONTHS = [
+    new Month("January", 31),
+    new Month("February", 0, true),
+    new Month("March", 31),
+    new Month("April", 30),
+    new Month("May", 31),
+    new Month("June", 30),
+    new Month("July", 31),
+    new Month("August", 31),
+    new Month("September", 30),
+    new Month("October", 31),
+    new Month("November", 30),
+    new Month("December", 31),
+];
+const ALL_MONTHS = 12;
 function getCurrentSecondsInPercentage(date) {
-    const FULL_DAY_IN_SECONDS = 3600 * 24;
+    const HOURS_IN_DAY = 24;
+    const MINUTES_IN_HOUR_AND_SECONDS_IN_MINUTE = 60;
+    const FULL_DAY_IN_SECONDS = Math.pow(MINUTES_IN_HOUR_AND_SECONDS_IN_MINUTE, 2) * HOURS_IN_DAY;
     let seconds = date.getSeconds();
     let minutesInSeconds = date.getMinutes() * 60;
     let hoursInSeconds = date.getHours() * 3600;
