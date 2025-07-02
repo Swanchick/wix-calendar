@@ -11,8 +11,9 @@ class Week {
         this.eventManager = eventManager;
     }
 
-    build() {
-        const currentDayInWeek = this.date.getDate();
+    build(date: Date) {
+        this.date = date;
+        const currentDayInWeek = this.date.getDay();
 
         this.buildWeekNames(currentDayInWeek);
 

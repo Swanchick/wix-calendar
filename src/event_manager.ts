@@ -29,9 +29,11 @@ class EventManager {
         this.createButton!.onclick = (e) => {
             e.preventDefault();
 
+            
             if (this.windowState !== WindowState.CLOSED) {
                 if (this.validateForm()) {
                     this.onFormSuccess();
+                    console.log("Pressed button");
                     this.closeWindow();
                 }
             }
@@ -52,39 +54,50 @@ class EventManager {
             }
         }
 
-        const data = this.loadEventsFromStorage();
+        const data: Map<string, Array<IEventStorage>> = this.loadEventsFromStorage();
         this.loadEvents(data);
     }
 
     private loadEventsFromStorage(): Map<string, Array<IEventStorage>> {
         const dataString = localStorage.getItem(EVENT_LOCAL_STORAGE);
         if (dataString == null) {
-            localStorage.setItem(EVENT_LOCAL_STORAGE, "{}");
-
-            return new Map();
+            return JSON.parse("{}");
         }
 
         const data: Map<string, Array<IEventStorage>> = JSON.parse(dataString);
         return data;
     }
 
-    private loadEvents(data: Map<string, Iterable<IEventStorage>>) {
-        for (const key of data.keys()) {
-            const events: Iterable<IEventStorage> | undefined = data.get(key);
-            if (events === undefined) {
-                continue;
+    private loadEvents(data: Map<string, Iterable<IEventStorage>> | any) {        
+        if (data instanceof Map) {
+            for (const [key, events] of data) {
+                if (!events) continue;
+                
+                for (const eventStructure of events) {
+                    const event = eventStructure as WixEvent;
+                    this.addEvent(event);
+                }
             }
-
-            for (const eventStracture of events) {
-                const event = eventStracture as WixEvent;
-
-                this.addEvent(event);   
+        } else if (data && typeof data === "object") {
+            for (const [key, events] of Object.entries(data)) {
+                if (!events) continue;
+                
+                for (const eventStructure of events as Iterable<IEventStorage>) {
+                    const event = eventStructure as WixEvent;
+                    this.addEvent(event);
+                }
             }
+        } else {
+            return;
         }
-    }
+}
 
     private saveEvent(event: WixEvent) {
-        const data = this.loadEventsFromStorage();
+        let data: Map<string, Array<WixEvent>> | any = this.loadEventsFromStorage();
+        if (data && typeof data === "object") {
+            data = new Map();
+        }
+        
         const dateKey = this.dateToKey(event.startDate);
 
         let events = data.get(dateKey);
@@ -217,16 +230,16 @@ class EventManager {
         if (formTitle === undefined || !(formTitle instanceof HTMLInputElement)) {
             return false;
         }
-        
-        const validateTitle = this.validateTextFields(FORM_TITLE_WARNING_ID, formTitle.value);
 
+        const validateTitle = this.validateTextFields(FORM_TITLE_WARNING_ID, formTitle.value);
+        
         const formDescription = document.getElementById(FORM_DESCRIPTION_ID);
-        if (formDescription === undefined || !(formDescription instanceof HTMLInputElement)) {
+        if (formDescription === undefined || !(formDescription instanceof HTMLTextAreaElement)) {
             return false;
         }
 
         const validateDescription = this.validateTextFields(FORM_DESCRIPTION_WARNING_ID, formDescription.value);
-
+        
         const formStartDate = document.getElementById(FORM_START_TIME_ID);
         if (formStartDate === undefined || !(formStartDate instanceof HTMLInputElement)) {
             return false;
@@ -240,14 +253,14 @@ class EventManager {
         }
         
         const validateEndDate = this.validateDate(FORM_END_TIME_WARNING_ID, formEndDate.value);
-
+        
         if (!(validateTitle && validateDescription && validateStartDate && validateEndDate)) {
             return false;
         }
 
         const startDate = new Date(formStartDate.value);
         const endDate = new Date(formEndDate.value);
-
+        
         const validateSameDayDates = this.validateSameDates(startDate, endDate);
         if (!validateSameDayDates) {
             return false;
@@ -257,7 +270,7 @@ class EventManager {
         if (!validateEndDateBedoreStartDate) {
             return false;
         }
-
+        
         const event = new WixEvent(formTitle.value, formDescription.value, startDate, endDate);
         this.addEvent(event);
         this.saveEvent(event);
@@ -272,7 +285,7 @@ class EventManager {
             return false;
         }
 
-        return false;
+        return true;
     }
 
     private validateDate(warningId: string, value: string): boolean {

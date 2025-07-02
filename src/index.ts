@@ -1,5 +1,5 @@
-window.onclick = (e) => {
-    
+window.onload = (_) => {
+    const calendar = new Calendar();
 
-    console.log("Hello World");
+    calendar.start();
 };

@@ -1,15 +1,16 @@
 "use strict";
 class Month {
-    constructor(name, days, isFebruary = false) {
+    constructor(name, days, position, isFebruary = false) {
         this.name = name;
         this.internalDays = days;
+        this.position = position;
         this.isFebruary = isFebruary;
     }
-    getDays(date) {
+    getDays(year) {
         if (!this.isFebruary) {
             return this.internalDays;
         }
-        const isLeapYear = this.isLeapYear(date.getFullYear());
+        const isLeapYear = this.isLeapYear(year);
         const februaryDays = isLeapYear ? 29 : 28;
         return februaryDays;
     }

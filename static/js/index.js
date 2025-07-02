@@ -1,4 +1,5 @@
 "use strict";
-window.onclick = (e) => {
-    console.log("Hello World");
+window.onload = (_) => {
+    const calendar = new Calendar();
+    calendar.start();
 };
