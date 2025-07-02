@@ -4,25 +4,6 @@ enum WindowState {
     DETAILS,
 }
 
-/// Todo:
-/// loadFromLocalStorage +
-/// loadEvents +
-/// saveEvents +
-/// openForm +
-/// validateForm +
-/// validateTextFields +
-/// validateSameDates +
-/// validateDate +
-/// validateEndDate +
-/// resetAllInputs +
-/// resetAllWarnings +
-/// showWarning +
-/// openDetails +
-/// closeWindow +
-/// dateToKeys +
-/// addEvent +
-/// getTodayEvents +
-
 class EventManager {
     private eventWindow: HTMLElement | null = document.getElementById(EVENT_WINDOW_ID);
     private eventForm: HTMLElement | null = document.getElementById(EVENT_FORM_ID);
@@ -204,11 +185,31 @@ class EventManager {
         this.windowState = WindowState.FORM;
     }
 
-    private openDetails() {
+    openDetails(event: WixEvent) {
         this.eventWindow?.classList.remove("hidden");
         this.eventDetails?.classList.remove("hidden");
-
         this.windowState = WindowState.DETAILS;
+
+        const detailsTitle = document.getElementById(DETAILS_TITLE_ID);
+        if (detailsTitle === undefined) {
+            return;
+        }
+
+        detailsTitle!.textContent = event.title;
+        
+        const detailsDescription = document.getElementById(DETAILS_DESCRIPTION_ID);
+        if (detailsDescription === undefined) {
+            return;
+        }
+        
+        detailsDescription!.textContent = event.description;
+
+        const detailsTime = document.getElementById(DETAILS_TIMES_ID);
+        if (detailsTime === undefined) {
+            return;
+        }
+
+        detailsTime!.textContent = event.formatTime;
     }
 
     private validateForm(): boolean {

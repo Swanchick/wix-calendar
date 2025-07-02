@@ -47,27 +47,27 @@ const DAY_NAMES = [
 const DAYS_IN_WEEK = 7;
 
 const MONTHS = [
-    new Month("January", 31),
-    new Month("February", 0, true),
-    new Month("March", 31),
-    new Month("April", 30),
-    new Month("May", 31),
-    new Month("June", 30),
-    new Month("July", 31),
-    new Month("August", 31),
-    new Month("September", 30),
-    new Month("October", 31),
-    new Month("November", 30),
-    new Month("December", 31),
+    new Month("January",    31, 0),
+    new Month("February",   0,  1, true),
+    new Month("March",      31, 2),
+    new Month("April",      30, 3),
+    new Month("May",        31, 4),
+    new Month("June",       30, 5),
+    new Month("July",       31, 6),
+    new Month("August",     31, 7),
+    new Month("September",  30, 8),
+    new Month("October",    31, 9),
+    new Month("November",   30, 10),
+    new Month("December",   31, 11),
 ];
 
 const ALL_MONTHS = 12;
 const ONE_HOUR_IN_PERCENTAGE = 4.166666666666666;
 
-function getCurrentSecondsInPercentage(date: Date): number {
-    const HOURS_IN_DAY = 24;
-    const MINUTES_IN_HOUR_AND_SECONDS_IN_MINUTE = 60;
-    
+const HOURS_IN_DAY = 24;
+const MINUTES_IN_HOUR_AND_SECONDS_IN_MINUTE = 60;
+
+function getCurrentSecondsInPercentage(date: Date): number {    
     const FULL_DAY_IN_SECONDS = Math.pow(MINUTES_IN_HOUR_AND_SECONDS_IN_MINUTE, 2) * HOURS_IN_DAY;
 
     let seconds = date.getSeconds();
