@@ -19,6 +19,13 @@ class WixEvent implements IEventStorage {
         this.endDate = endDate;
     }
     
+    static fromStorage(storage: IEventStorage) {
+        const startDate = new Date(storage.startDate);
+        const endDate = new Date(storage.endDate);
+
+        return new WixEvent(storage.title, storage.description, startDate, endDate);
+    }
+
     get formatTime(): string {
         let startHours = this.startDate.getHours();
         let startHoursStr = String(startHours).padStart(2, "0");

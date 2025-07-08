@@ -48,6 +48,7 @@ class EventManager {
         };
         const data = this.loadEventsFromStorage();
         this.loadEvents(data);
+        console.log(this.events);
     }
     loadEventsFromStorage() {
         const dataString = localStorage.getItem(EVENT_LOCAL_STORAGE);
@@ -97,7 +98,10 @@ class EventManager {
         localStorage.setItem(EVENT_LOCAL_STORAGE, JSON.stringify(data));
     }
     addEvent(event) {
-        const startDate = event.startDate;
+        let startDate = event.startDate;
+        if (typeof startDate === "string") {
+            startDate = new Date(startDate);
+        }
         const startDateString = this.dateToKey(startDate);
         if (this.events.get(startDateString) === undefined) {
             this.events.set(startDateString, []);

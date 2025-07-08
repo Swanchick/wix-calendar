@@ -56,6 +56,8 @@ class EventManager {
 
         const data: Map<string, Array<IEventStorage>> = this.loadEventsFromStorage();
         this.loadEvents(data);
+
+        console.log(this.events);
     }
 
     private loadEventsFromStorage(): Map<string, Array<IEventStorage>> {
@@ -90,7 +92,7 @@ class EventManager {
         } else {
             return;
         }
-}
+    }
 
     private saveEvent(event: WixEvent) {
         let data: Map<string, Array<WixEvent>> | any = this.loadEventsFromStorage();
@@ -112,7 +114,10 @@ class EventManager {
     }
 
     private addEvent(event: WixEvent) {
-        const startDate = event.startDate;
+        let startDate = event.startDate;
+        if (typeof startDate === "string") {
+            startDate = new Date(startDate);
+        }
         const startDateString = this.dateToKey(startDate);
         
         if (this.events.get(startDateString) === undefined) {

@@ -17,7 +17,17 @@ class Week {
 
         this.buildWeekNames(currentDayInWeek);
 
+        console.log(date)
+
         const weekDays = this.getWeek(this.date);
+        for (const weekDay of weekDays) {
+            console.log(weekDay.getDate());
+            console.log(weekDay.getMonth());
+            console.log(weekDay.getFullYear());
+            console.log("==========");
+
+        }
+
         this.buildWeekDays(this.date, weekDays);
         this.buildDays(currentDayInWeek, weekDays);
     }
@@ -60,7 +70,7 @@ class Week {
 
             if (events !== undefined) {
                 for (const eventStorage of events) {
-                    const event = eventStorage as WixEvent;
+                    const event = WixEvent.fromStorage(eventStorage);
                     const element = event.element;
                     element.onclick = (_) => {
                         this.eventManager.openDetails(event);
@@ -108,10 +118,11 @@ class Week {
 
         const year = date.getFullYear();
         const month = date.getMonth();
+        const currentDayInMonth = date.getDate();
         const currentDayInWeek = date.getDay();
 
         const currentMonth = MONTHS[month];
-        const firstDay = currentMonth.getDays(year) - currentDayInWeek;
+        const firstDay = currentDayInMonth - currentDayInWeek;
 
         const prevMonth = this.getPreviousMonth(currentMonth);
         const prevYear = year - 1;

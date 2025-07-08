@@ -6,6 +6,11 @@ class WixEvent {
         this.startDate = startDate;
         this.endDate = endDate;
     }
+    static fromStorage(storage) {
+        const startDate = new Date(storage.startDate);
+        const endDate = new Date(storage.endDate);
+        return new WixEvent(storage.title, storage.description, startDate, endDate);
+    }
     get formatTime() {
         let startHours = this.startDate.getHours();
         let startHoursStr = String(startHours).padStart(2, "0");
