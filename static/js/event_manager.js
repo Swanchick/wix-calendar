@@ -27,7 +27,6 @@ class EventManager {
             if (this.windowState !== WindowState.CLOSED) {
                 if (this.validateForm()) {
                     this.onFormSuccess();
-                    console.log("Pressed button");
                     this.closeWindow();
                 }
             }
@@ -48,7 +47,6 @@ class EventManager {
         };
         const data = this.loadEventsFromStorage();
         this.loadEvents(data);
-        console.log(this.events);
     }
     loadEventsFromStorage() {
         const dataString = localStorage.getItem(EVENT_LOCAL_STORAGE);

@@ -11,14 +11,7 @@ class Week {
         this.date = date;
         const currentDayInWeek = this.date.getDay();
         this.buildWeekNames(currentDayInWeek);
-        console.log(date);
         const weekDays = this.getWeek(this.date);
-        for (const weekDay of weekDays) {
-            console.log(weekDay.getDate());
-            console.log(weekDay.getMonth());
-            console.log(weekDay.getFullYear());
-            console.log("==========");
-        }
         this.buildWeekDays(this.date, weekDays);
         this.buildDays(currentDayInWeek, weekDays);
     }
@@ -69,21 +62,25 @@ class Week {
         if (weekNamesContainer === null) {
             return;
         }
-        for (const child of weekNamesContainer.children) {
+        const weekNamesChildren = Array.from(weekNamesContainer.children);
+        for (const child of weekNamesChildren) {
             weekNamesContainer.removeChild(child);
         }
         const weekDatesContainer = this.weekDatesContainer;
         if (weekDatesContainer === null) {
             return;
         }
-        for (const child of weekDatesContainer.children) {
-            weekNamesContainer.removeChild(child);
+        const weekDatesChildren = Array.from(weekDatesContainer.children);
+        for (const child of weekDatesChildren) {
+            console.log(child);
+            weekDatesContainer.removeChild(child);
         }
         const dayContainer = this.dayContainer;
         if (dayContainer === null) {
             return;
         }
-        for (const child of dayContainer.children) {
+        const dayChildren = Array.from(dayContainer.children);
+        for (const child of dayChildren) {
             dayContainer.removeChild(child);
         }
     }

@@ -33,7 +33,6 @@ class EventManager {
             if (this.windowState !== WindowState.CLOSED) {
                 if (this.validateForm()) {
                     this.onFormSuccess();
-                    console.log("Pressed button");
                     this.closeWindow();
                 }
             }
@@ -56,8 +55,6 @@ class EventManager {
 
         const data: Map<string, Array<IEventStorage>> = this.loadEventsFromStorage();
         this.loadEvents(data);
-
-        console.log(this.events);
     }
 
     private loadEventsFromStorage(): Map<string, Array<IEventStorage>> {
