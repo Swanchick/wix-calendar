@@ -1,6 +1,8 @@
-import React from "react";
+import React, { ReactElement } from "react";
 
-export function SideContainer() {
+
+
+export function SideContainer(): ReactElement {
     return (
         <div className="side-container">
             <button className="button side-button" id="open-event-window"> + Event</button>

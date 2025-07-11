@@ -1,9 +1,9 @@
-import React from "react";
+import React, { ReactElement } from "react";
 import ReactDOM from "react-dom/client";
 import { Header } from "./header";
 import { Calendar } from "./calendar/calendar";
 
-function App() {
+function App(): ReactElement {
     return (
         <>
             <Header/>
@@ -18,5 +18,9 @@ window.onload = () => {
         return;
     }
 
-    ReactDOM.createRoot(root).render(<App/>);
+    if (root.parentElement == null) {
+        return;
+    }
+
+    ReactDOM.createRoot(root.parentElement).render(<App/>);
 }
