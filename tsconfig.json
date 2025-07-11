@@ -112,5 +112,5 @@
 
     "outDir": "static/js",
   },
-  "include": ["src/**/*"]
+  "include": ["old_src/**/*"]
 }

@@ -3,94 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="static/css/reset.css">
-    <link rel="stylesheet" href="static/css/general.css">
-    <link rel="stylesheet" href="static/css/main.css">
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/general.css">
+    <link rel="stylesheet" href="/css/main.css">
     <title>Kyryl's Calendar</title>
 </head>
 <body>
-    <header>
-        <div class="header-left">
-            <h2>Kyryl's Calendar</h2>
-            <button class="header-button">Today</button>
+    <div id="root"></div>
 
-            <button class="header-symbol-button"><</button>
-            <button class="header-symbol-button">></button>
-
-            <h2 id="current-date">June - 2025</h2>
-        </div>
-    </header>
-
-    <div class="main-container">
-        <div class="side-container">
-            <button class="button side-button" id="open-event-window">+ Event</button>
-
-            <h2>Very cool placeholder</h2>
-        </div>
-
-        <div class="week-container">
-            <div class="days-grid text-align-center" id="week-names-container">
-            </div>
-
-            <div class="days-grid text-align-center bottom-border" id="week-dates">
-            </div>
-
-            <div class="days-grid full-height" id="days-container">
-            </div>
-        </div>
-    </div>
-
-    <div class="event-window hidden" id="event-window">
-        <div class="event-menu hidden" id="event-form">
-            <h1>Create new event</h1>
-            <form>
-                <div class="form-group">
-                    <label>Title</label>
-                    <input name="event-title" type="text" id="event-title" class="form-text" autocomplete="off">
-                    <label class="warning hidden" id="title-warning">Title field shouldn't be empty!</label>
-                </div>
-
-                <div class="form-group">
-                    <label>Description</label>
-                    <textarea id="event-description" class="form-text"></textarea>
-                    <label class="warning hidden" id="description-warning">Description field shouldn't be empty!</label>
-                </div>
-
-                <div class="form-group">
-                    <label>Event start time</label>
-                    <input type="datetime-local" name="event-start-time" id="event-start-time" class="form-text">
-                    <label class="warning hidden" id="start-time-warning">Specify the start date.</label>
-                </div>
-
-                <div class="form-group">
-                    <label>Event end time</label>
-                    <input type="datetime-local" name="event-end-time" id="event-end-time" class="form-text">
-                    <label class="warning hidden" id="end-time-warning">Specify the end date. Note, that end time should be at the same day as start date!</label>
-                </div>
-
-                <div class="form-submit-container">
-                    <input type="submit" value="Create" class="button submit-button" id="create-event-button">
-                    <input type="submit" value="Close" class="button submit-button" id="close-event-button">
-                </div>
-            </form>
-        </div>
-
-        <div class="event-menu hidden" id="event-details">
-            <h2 id="event-details-title">Event title</h2>
-            <p id="event-details-times">10 am - 11 am</p>
-            <p id="event-details-description"></p>
-        </div>
-    </div>
-
-    <script src="static/js/month.js"></script>
-    <script src="static/js/globals.js"></script>
-    <script src="static/js/event.js"></script>
-    <script src="static/js/event_manager.js"></script>
-    <script src="static/js/arrow.js"></script>
-    <script src="static/js/week.js"></script>
-    <script src="static/js/calendar.js"></script>
-
-    <!-- Entry point -->
-    <script src="static/js/index.js"></script>
+    <script type="module" src="/src/index.tsx"></script>
 </body>
 </html>
