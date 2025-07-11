@@ -3,6 +3,7 @@ import { DAY_NAMES, DAYS_IN_WEEK, MONTHS, ALL_MONTHS } from "../global";
 import { WeekElement } from "./weekElement";
 import { Month } from "../utils/month";
 import { TimeElements } from "./timeElements";
+import { Arrow } from "./arrow";
 
 function getPreviousMonth(month: Month): Month {
     const previousMonth = month.position - 1;
@@ -118,6 +119,9 @@ function generateDayElement(isCurrentDay: boolean, isLastDay: boolean): ReactEle
     return (
         <div className={finalClassName}>
             <TimeElements/>
+            {isCurrentDay ? (
+                <Arrow/>
+            ) : null}
         </div>
     );
 }

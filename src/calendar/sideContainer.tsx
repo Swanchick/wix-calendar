@@ -1,7 +1,5 @@
 import React, { ReactElement } from "react";
 
-
-
 export function SideContainer(): ReactElement {
     return (
         <div className="side-container">
