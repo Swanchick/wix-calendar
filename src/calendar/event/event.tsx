@@ -1,4 +1,4 @@
-import React, {ReactElement, useState} from "react";
+import React, { ReactElement } from "react";
 import { getCurrentSecondsInPercentage } from "../../global";
 
 type EventProps = {title: string, start: Date, end: Date, description: string};
