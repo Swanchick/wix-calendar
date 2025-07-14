@@ -4,6 +4,7 @@ import { WeekElement } from "./weekElement";
 import { Month } from "../utils/month";
 import { TimeElements } from "./timeElements";
 import { Arrow } from "./arrow";
+import { WixEvent } from "./event/event"
 
 function getPreviousMonth(month: Month): Month {
     const previousMonth = month.position - 1;
@@ -116,11 +117,24 @@ function generateDayElement(isCurrentDay: boolean, isLastDay: boolean): ReactEle
     const lastDayClass = !isLastDay ? "right-border" : "";
     const finalClassName = `day-container ${lastDayClass}`;
 
+    const start = new Date(2025, 6, 14, 11, 0);
+    const end = new Date(2025, 6, 14, 12, 0);    
+
+    const event = (<WixEvent
+        title="Test 1"
+        start={start}
+        end={end}
+        description="Blah blah blah"
+    />);
+
     return (
         <div className={finalClassName}>
             <TimeElements/>
             {isCurrentDay ? (
-                <Arrow/>
+                <>
+                    <Arrow/>
+                    {event}
+                </>
             ) : null}
         </div>
     );
@@ -133,7 +147,6 @@ function generateDayElements(currentDayInWeek: number, week: Array<Date>): Array
     for (let i = 0; i < DAYS_IN_WEEK; i++) {
         const isCurrentDay = i === currentDayInWeek;
         const isLastDay = i === DAYS_IN_WEEK - 1;
-
         const day = generateDayElement(isCurrentDay, isLastDay);
 
         elements.push(day);
