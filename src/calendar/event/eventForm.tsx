@@ -1,6 +1,7 @@
-import React, { ReactElement, useState, SetStateAction, Dispatch, FormEvent } from "react";
+import React, { ReactElement, useState, SetStateAction, Dispatch, FormEvent, useContext } from "react";
 import { EventData } from "./eventData";
 import { getCurrentSecondsInPercentage } from "../../global";
+import { EventContext } from "./eventContext";
 
 type InputFieldProps = {
     name: string; 
@@ -69,14 +70,6 @@ function TextAreaField({name, onInputSubmit}: TextAreaFieldProps): ReactElement 
 }
 
 export function EventForm(): ReactElement {    
-    const onFormClose = (e: FormEvent) => {
-        e.preventDefault();
-    };
-
-    const onFormSubmit = (e: FormEvent) => {
-        e.preventDefault();
-    };
-
     const event: EventData = {
         title: null,
         description: null,
@@ -138,6 +131,21 @@ export function EventForm(): ReactElement {
 
         setError("");
         event.endDate = date;
+    };
+
+    const onFormClose = (e: FormEvent) => {
+        e.preventDefault();
+    };
+
+    const onFormSubmit = (e: FormEvent) => {
+        e.preventDefault();
+
+        if (event.title === null || event.description === null || event.startDate === null || event.endDate === null) {
+            return;
+        }
+
+        const context = useContext(EventContext);
+        context.setEvents([...context.events, event]);
     };
 
     return (
