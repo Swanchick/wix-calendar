@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement, useContext, useState } from "react";
 import ReactDOM from "react-dom/client";
 import { Header } from "./header";
 import { Calendar } from "./calendar/calendar";
@@ -6,6 +6,13 @@ import { EventWindow } from "./calendar/event/eventWindow";
 import { EventState } from "./calendar/event/eventState";
 import { EventContextType, EventContext } from "./calendar/event/eventContext";
 import { EventData } from "./calendar/event/eventData";
+
+declare global {
+    interface Window {
+        showEvents: () => void
+    }
+}
+
 
 function App(): ReactElement {
     const [windowState, setWindowState] = useState<EventState>(EventState.CLOSED);
@@ -49,10 +56,16 @@ function App(): ReactElement {
         setWindowState: setWindowState
     };
 
+    window.showEvents = () => {
+        console.log("===============");
+        console.log(events);
+    };
+
     return (
         <EventContext.Provider value={contextValue}>
             <Header/>
             <Calendar/>
+            
             {(windowState !== EventState.CLOSED) ? 
                 (<EventWindow state={windowState}/>) : ""
             }

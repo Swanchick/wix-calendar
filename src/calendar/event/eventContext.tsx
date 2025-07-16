@@ -9,7 +9,7 @@ export interface EventContextType {
     events: EventRecord,
     setEvents: Dispatch<SetStateAction<EventRecord>>,
     windowState: EventState,
-    setWindowState: Dispatch<SetStateAction<EventState>>,
+    setWindowState: Dispatch<SetStateAction<EventState>>
 }
 
 export const EventContext = createContext<EventContextType>({

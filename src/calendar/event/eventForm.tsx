@@ -70,6 +70,8 @@ function TextAreaField({name, onInputSubmit}: TextAreaFieldProps): ReactElement 
 }
 
 export function EventForm(): ReactElement {    
+    const context = useContext(EventContext);
+    
     const event: EventData = {
         title: null,
         description: null,
@@ -144,7 +146,6 @@ export function EventForm(): ReactElement {
             return;
         }
 
-        const context = useContext(EventContext);
         const key = dateToKey(event.startDate);
         const events = context.events;
 

@@ -1,7 +1,13 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useContext } from "react";
 import { getCurrentSecondsInPercentage } from "../../global";
+import { EventContext } from "./eventContext";
 
-type EventProps = {title: string, start: Date, end: Date, description: string};
+type EventProps = {
+    title: string, 
+    start: Date, 
+    end: Date, 
+    description: string
+};
 
 
 function formatTime(start: Date, end: Date): string {
@@ -27,8 +33,13 @@ export function WixEvent({title, start, end, description}: EventProps): ReactEle
     const height = endPosition - position;
 
     const handleEventClick = (_) => {
-        console.log("Hello World");
+        console.log("==================");
+        console.log(title);
+        console.log(description);
+        console.log(formatTime(start, end));
     };
+
+    console.log(`Created: ${title}!`);
     
     return (
         <button className="event-mark" onClick={handleEventClick} style={{

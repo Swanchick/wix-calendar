@@ -75,121 +75,61 @@ function getWeek(date: Date): Array<Date> {
     return days;
 }
 
-function generateDayNames(date: Date): Array<ReactElement> {
-    const dayNames: Array<ReactElement> = [];
-    
-    for (let i = 0; i < DAYS_IN_WEEK; i++) {
-        const element = (
-            <WeekElement
-                key={`DAY_NAME: ${i}`}
-                day={i}
-                currentDay={date.getDay()}
-                text={DAY_NAMES[i]}
-            />
-        );
-
-        dayNames.push(element);
-    }
-    
-    
-    return dayNames;
-}
-
-function generateDayWeeks(date: Date, week: Array<Date>): Array<ReactElement> {
-    const dayWeeks: Array<ReactElement> = [];
-    
-    for (let i = 0; i < DAYS_IN_WEEK; i++) {
-        const dayInMonth = week[i];
-        const element = (
-            <WeekElement
-                key={`DAY_IN_MONTH: ${i}`}
-                day={i}
-                currentDay={date.getDate()}
-                text={`${dayInMonth.getDate()}`}
-                />
-        );
-
-        dayWeeks.push(element);
-    }
-
-    return dayWeeks;
-}
-
-function generateDayElement(isCurrentDay: boolean, isLastDay: boolean, events: Array<EventData> | undefined): ReactElement {
-    const lastDayClass = !isLastDay ? "right-border" : "";
-    const finalClassName = `day-container ${lastDayClass}`;
-
-    const eventElements: Array<ReactElement> = [];
-
-    if (events !== undefined) {
-        for (const event of events) {
-            const element = (
-                <WixEvent 
-                    title={event.title!}
-                    start={event.startDate!}
-                    end={event.endDate!}
-                    description={event.description!}
-                />
-            );
-
-            eventElements.push(element);
-        }
-    }
-
-    return (
-        <div className={finalClassName}>
-            <TimeElements/>
-            {isCurrentDay ? (
-                <Arrow/>
-            ) : ""}
-            {eventElements}
-        </div>
-    );
-}
-
-
-function generateDayElements(currentDayInWeek: number, week: Array<Date>): Array<ReactElement> {
-    const elements: Array<ReactElement> = []
-    
+export function WeekContainer(): ReactElement {
     const context = useContext(EventContext);
     const events = context.events;
-
-    for (let i = 0; i < DAYS_IN_WEEK; i++) {
-        const isCurrentDay = i === currentDayInWeek;
-        const isLastDay = i === DAYS_IN_WEEK - 1;
-
-        const today = week[i]
-        const key = dateToKey(today);
-        const day = generateDayElement(isCurrentDay, isLastDay, events[key]);
-
-        
-
-        elements.push(day);
-    }
-
-    return elements;
-}
-
-export function WeekContainer(): ReactElement {
     const date = new Date();
-    const weekNames = generateDayNames(date);
+    const currentDateKey = dateToKey(date);
     const week = getWeek(date);
-
-    const weekDays = generateDayWeeks(date, week);
-    const weekTimeDayElements = generateDayElements(date.getDay(), week);
 
     return (
         <div className="week-container">
             <div className="days-grid text-align-center" id="week-names-container">
-                {weekNames}
+                {DAY_NAMES.map((name, i) => (
+                    <WeekElement
+                        key={`DAY_NAME: ${name} ${i}`}
+                        day={i}
+                        currentDay={date.getDate()}
+                        text={name}
+                    />
+                ))}
             </div>
 
             <div className="days-grid text-align-center bottom-border" id="week-dates">
-                {weekDays}
+                {week.map((dateInMonth, i) => (
+                    <WeekElement
+                        key={`DAY_IN_MONTH: ${dateInMonth.toDateString()}`}
+                        day={i}
+                        currentDay={date.getDate()}
+                        text={`${dateInMonth.getDate()}`}
+                    />
+                ))}
             </div>
 
             <div className="days-grid full-height" id="days-container">
-                {weekTimeDayElements}
+                {week.map((dayInMonth, dayInWeek) => (
+                    <div className={`day-container ${(dayInWeek === DAYS_IN_WEEK - 1) ? "" : "right-border"}`}>
+                        <TimeElements/>
+                        {
+                            (dateToKey(dayInMonth) === currentDateKey) ? 
+                            <Arrow/> : 
+                            ""
+                        }
+
+                        {
+                            (events[dateToKey(dayInMonth)] !== undefined) ?
+                            events[dateToKey(dayInMonth)].map((eventData) => (
+                                <WixEvent 
+                                    title={eventData.title!}
+                                    description={eventData.description!}
+                                    start={eventData.startDate!}
+                                    end={eventData.endDate!}
+                                />
+                            )) :
+                            ""
+                        }
+                    </div>
+                ))}
             </div>
         </div>
     );
