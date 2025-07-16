@@ -1,7 +1,10 @@
 import React, { ReactElement } from "react";
+import { MONTHS } from "./global";
 
 
 export function Header(): ReactElement {
+    const date = new Date();
+    
     return (
         <header>
             <div className="header-left">
@@ -11,7 +14,7 @@ export function Header(): ReactElement {
                 <button className="header-symbol-button">{"<"}</button>
                 <button className="header-symbol-button">{">"}</button>
 
-                <h2 id="current-date">June - 2025</h2>
+                <h2 id="current-date">{MONTHS[date.getMonth()].name} - {date.getFullYear()}</h2>
             </div>
         </header>
     );

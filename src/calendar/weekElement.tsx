@@ -12,7 +12,7 @@ export function WeekElement({day, currentDay, text}: WeekElementsProps): ReactEl
     const rightBorderClassName = (day !== DAYS_IN_WEEK - 1) ? "right-border" : "";
     const currentDayClassName = (day === currentDay) ? "current-day" : "";
 
-    const finalClassName = `${rightBorderClassName} ${currentDay}`;
+    const finalClassName = `${rightBorderClassName} ${currentDayClassName}`;
     
     return (
         <h2 className={finalClassName}>{text}</h2>

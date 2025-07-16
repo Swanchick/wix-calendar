@@ -6,14 +6,6 @@ import { EventWindow } from "./calendar/event/eventWindow";
 import { EventState } from "./calendar/event/eventState";
 import { EventContextType, EventContext } from "./calendar/event/eventContext";
 import { EventData, loadEvents } from "./calendar/event/eventData";
-import { EVENT_LOCAL_STORAGE } from "./global";
-
-declare global {
-    interface Window {
-        showEvents: () => void
-    }
-}
-
 
 function App(): ReactElement {
     const [windowState, setWindowState] = useState<EventState>(EventState.CLOSED);
@@ -28,11 +20,6 @@ function App(): ReactElement {
         setEvents: setEvents,
         windowState: windowState,
         setWindowState: setWindowState
-    };
-
-    window.showEvents = () => {
-        console.log("===============");
-        console.log(events);
     };
 
     return (
