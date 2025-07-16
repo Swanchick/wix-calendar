@@ -4,3 +4,7 @@ export interface EventData {
     startDate: Date | null;
     endDate: Date | null;
 }
+
+export function dateToKey(date: Date): string {
+    return `${date.getFullYear()}:${date.getMonth()}:${date.getDate()}`;
+}

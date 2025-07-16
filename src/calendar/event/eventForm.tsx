@@ -1,5 +1,5 @@
 import React, { ReactElement, useState, SetStateAction, Dispatch, FormEvent, useContext } from "react";
-import { EventData } from "./eventData";
+import { dateToKey, EventData } from "./eventData";
 import { getCurrentSecondsInPercentage } from "../../global";
 import { EventContext } from "./eventContext";
 
@@ -145,7 +145,15 @@ export function EventForm(): ReactElement {
         }
 
         const context = useContext(EventContext);
-        context.setEvents([...context.events, event]);
+        const key = dateToKey(event.startDate);
+        const events = context.events;
+
+        if (events[key] === undefined) {
+            events[key] = [];
+        }
+
+        events[key].push(event);
+        context.setEvents(events);
     };
 
     return (
@@ -172,7 +180,7 @@ export function EventForm(): ReactElement {
 
                 <div className="form-group">
                     <InputField 
-                        key="title-field"
+                        key="start-date-field"
                         name="Event start time"
                         type="datetime-local"
                         onInputSubmit={onStartDateSubmit}
@@ -181,7 +189,7 @@ export function EventForm(): ReactElement {
 
                 <div className="form-group">
                     <InputField 
-                        key="title-field"
+                        key="end-date-field"
                         name="Event end time"
                         type="datetime-local"
                         onInputSubmit={onEndDateSubmit}

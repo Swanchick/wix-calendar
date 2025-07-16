@@ -1,4 +1,4 @@
-import React, { createContext, Dispatch, ReactElement, useState } from "react";
+import React, { ReactElement, useState } from "react";
 import ReactDOM from "react-dom/client";
 import { Header } from "./header";
 import { Calendar } from "./calendar/calendar";
@@ -9,7 +9,37 @@ import { EventData } from "./calendar/event/eventData";
 
 function App(): ReactElement {
     const [windowState, setWindowState] = useState<EventState>(EventState.CLOSED);
-    const [events, setEvents] = useState<Array<EventData>>([]);
+
+    const [events, setEvents] = useState<Record<string, Array<EventData>>>({
+        "2025:6:16": [
+            {
+                title: "Test 2",
+                description: "Test Description",
+                startDate: new Date(2025, 6, 16, 13, 0),
+                endDate: new Date(2025, 6, 16, 14, 0)
+            },
+            {
+                title: "Test 3",
+                description: "Test Description",
+                startDate: new Date(2025, 6, 16, 14, 0),
+                endDate: new Date(2025, 6, 16, 15, 0)
+            },
+            {
+                title: "Test 4",
+                description: "Test Description",
+                startDate: new Date(2025, 6, 16, 16, 0),
+                endDate: new Date(2025, 6, 16, 18, 0)
+            }
+        ],
+        "2025:6:15": [
+            {
+                title: "Lunch",
+                description: "Eat food",
+                startDate: new Date(2025, 6, 16, 12, 0),
+                endDate: new Date(2025, 6, 16, 13, 0)
+            }
+        ]
+    });
     
     const contextValue: EventContextType = {
         currentEvent: null,

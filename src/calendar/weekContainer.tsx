@@ -1,10 +1,12 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useContext } from "react";
 import { DAY_NAMES, DAYS_IN_WEEK, MONTHS, ALL_MONTHS } from "../global";
 import { WeekElement } from "./weekElement";
 import { Month } from "../utils/month";
 import { TimeElements } from "./timeElements";
 import { Arrow } from "./arrow";
-import { WixEvent } from "./event/event"
+import { dateToKey, EventData } from "./event/eventData";
+import { EventContext } from "./event/eventContext";
+import { WixEvent } from "./event/event";
 
 function getPreviousMonth(month: Month): Month {
     const previousMonth = month.position - 1;
@@ -113,29 +115,34 @@ function generateDayWeeks(date: Date, week: Array<Date>): Array<ReactElement> {
     return dayWeeks;
 }
 
-function generateDayElement(isCurrentDay: boolean, isLastDay: boolean): ReactElement {
+function generateDayElement(isCurrentDay: boolean, isLastDay: boolean, events: Array<EventData> | undefined): ReactElement {
     const lastDayClass = !isLastDay ? "right-border" : "";
     const finalClassName = `day-container ${lastDayClass}`;
 
-    const start = new Date(2025, 6, 14, 11, 0);
-    const end = new Date(2025, 6, 14, 12, 0);    
+    const eventElements: Array<ReactElement> = [];
 
-    const event = (<WixEvent
-        title="Test 1"
-        start={start}
-        end={end}
-        description="Blah blah blah"
-    />);
+    if (events !== undefined) {
+        for (const event of events) {
+            const element = (
+                <WixEvent 
+                    title={event.title!}
+                    start={event.startDate!}
+                    end={event.endDate!}
+                    description={event.description!}
+                />
+            );
+
+            eventElements.push(element);
+        }
+    }
 
     return (
         <div className={finalClassName}>
             <TimeElements/>
             {isCurrentDay ? (
-                <>
-                    <Arrow/>
-                    {event}
-                </>
-            ) : null}
+                <Arrow/>
+            ) : ""}
+            {eventElements}
         </div>
     );
 }
@@ -144,10 +151,18 @@ function generateDayElement(isCurrentDay: boolean, isLastDay: boolean): ReactEle
 function generateDayElements(currentDayInWeek: number, week: Array<Date>): Array<ReactElement> {
     const elements: Array<ReactElement> = []
     
+    const context = useContext(EventContext);
+    const events = context.events;
+
     for (let i = 0; i < DAYS_IN_WEEK; i++) {
         const isCurrentDay = i === currentDayInWeek;
         const isLastDay = i === DAYS_IN_WEEK - 1;
-        const day = generateDayElement(isCurrentDay, isLastDay);
+
+        const today = week[i]
+        const key = dateToKey(today);
+        const day = generateDayElement(isCurrentDay, isLastDay, events[key]);
+
+        
 
         elements.push(day);
     }
