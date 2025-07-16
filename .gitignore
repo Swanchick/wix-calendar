@@ -1,3 +1,9 @@
+node_modules
+build
+npm-debug.log
+.env
+.DS_Store
+
 static/js/*
 old_src
 old_index.html
