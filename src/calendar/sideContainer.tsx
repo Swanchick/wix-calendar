@@ -1,9 +1,25 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useContext } from "react";
+import { EventContext } from "./event/eventContext";
+import { EventState } from "./event/eventState";
 
 export function SideContainer(): ReactElement {
+    const context = useContext(EventContext);
+    
+    const handleEventClick = () => {
+        context.setWindowState(EventState.FORM);
+    };
+    
+    
     return (
         <div className="side-container">
-            <button className="button side-button" id="open-event-window"> + Event</button>
+            <button 
+                className="button side-button" 
+                id="open-event-window"
+                onClick={handleEventClick}
+            > 
+            + Event
+            </button>
+            
             <h2>Very cool placeholder</h2>
         </div>
     );

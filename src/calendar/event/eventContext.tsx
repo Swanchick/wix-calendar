@@ -6,14 +6,16 @@ type EventRecord = Record<string, Array<EventData>>;
 
 export interface EventContextType {
     currentEvent: EventData | null
+    setCurrentEvent: Dispatch<SetStateAction<EventData | null>>
     events: EventRecord,
     setEvents: Dispatch<SetStateAction<EventRecord>>,
     windowState: EventState,
-    setWindowState: Dispatch<SetStateAction<EventState>>
+    setWindowState: Dispatch<SetStateAction<EventState>>,
 }
 
 export const EventContext = createContext<EventContextType>({
     currentEvent: null,
+    setCurrentEvent: () => {},
     events: {},
     setEvents: () => {},
     windowState: EventState.CLOSED,

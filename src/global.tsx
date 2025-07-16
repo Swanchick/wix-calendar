@@ -48,3 +48,19 @@ export function getCurrentSecondsInPercentage(date: Date): number {
 
     return ((hoursInSeconds + minutesInSeconds + seconds) / FULL_DAY_IN_SECONDS) * 100;
 }
+
+export function formatTime(start: Date, end: Date): string {
+    let startHours = start.getHours();
+    let startHoursStr = String(startHours).padStart(2, "0");
+
+    let startMinutes = start.getMinutes();
+    let startMinutesStr = String(startMinutes).padStart(2, "0");
+
+    let endHours = end.getHours();
+    let endHoursStr = String(endHours).padStart(2, "0");
+    
+    let endMinutes = end.getMinutes();
+    let endMinutesStr = String(endMinutes).padStart(2, "0");
+
+    return `${startHoursStr}:${startMinutesStr} - ${endHoursStr}:${endMinutesStr}`;
+}

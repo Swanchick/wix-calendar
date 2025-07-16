@@ -1,21 +1,37 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useContext } from "react";
 import { EventState } from "./eventState";
 import { EventForm } from "./eventForm";
+import { EventContext } from "./eventContext";
+import { EventDetails } from "./eventDetails";
 
 type EventWindowProps = {
     state: EventState, 
-    event?: {
-        title: string,
-        start: Date,
-        end: Date,
-        description: string
-    }
 }
 
-export function EventWindow({state, event} : EventWindowProps): ReactElement {
+export function EventWindow({state} : EventWindowProps): ReactElement {
+    const context = useContext(EventContext);
+    const eventDetails = context.currentEvent!;
+    
+    const closeWindow = () => {
+        context.setCurrentEvent(null);
+        context.setWindowState(EventState.CLOSED);
+    };
+
     return (
-        <div className="event-window">
-            <EventForm />
+        <div className="event-window" onClick={closeWindow}>
+            {
+                state === EventState.FORM ? 
+                <EventForm /> :
+                ""
+            }
+
+            {
+                state === EventState.DETAILS ?
+                <EventDetails 
+                    currentEvent={eventDetails}
+                /> :
+                ""
+            }
         </div>
     );
 }

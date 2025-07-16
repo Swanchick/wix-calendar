@@ -2,6 +2,7 @@ import React, { ReactElement, useState, SetStateAction, Dispatch, FormEvent, use
 import { dateToKey, EventData } from "./eventData";
 import { getCurrentSecondsInPercentage } from "../../global";
 import { EventContext } from "./eventContext";
+import { EventState } from "./eventState";
 
 type InputFieldProps = {
     name: string; 
@@ -137,6 +138,8 @@ export function EventForm(): ReactElement {
 
     const onFormClose = (e: FormEvent) => {
         e.preventDefault();
+
+        context.setWindowState(EventState.CLOSED);
     };
 
     const onFormSubmit = (e: FormEvent) => {
@@ -160,13 +163,19 @@ export function EventForm(): ReactElement {
                 [key]: [...eventsForDay, { ...event }]
             };
         });
+
+        context.setWindowState(EventState.CLOSED);
     };
 
+    const stopPropagation = (e) => {
+        e.stopPropagation();
+    }
+
     return (
-        <div className="event-menu">
+        <div className="event-menu" onClick={stopPropagation}>
             <h1>Create new event</h1>
 
-            <form>
+            <form onClick={stopPropagation}>
                 <div className="form-group">
                     <InputField 
                         key="title-field"

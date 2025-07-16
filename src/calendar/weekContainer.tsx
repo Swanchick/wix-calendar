@@ -109,7 +109,7 @@ export function WeekContainer(): ReactElement {
             <div className="days-grid full-height" id="days-container">
                 {week.map((dayInMonth, dayInWeek) => (
                     <div className={`day-container ${(dayInWeek === DAYS_IN_WEEK - 1) ? "" : "right-border"}`}>
-                        <TimeElements/>
+                        <TimeElements />
                         {
                             (dateToKey(dayInMonth) === currentDateKey) ? 
                             <Arrow/> : 
@@ -120,10 +120,9 @@ export function WeekContainer(): ReactElement {
                             (events[dateToKey(dayInMonth)] !== undefined) ?
                             events[dateToKey(dayInMonth)].map((eventData) => (
                                 <WixEvent 
-                                    title={eventData.title!}
-                                    description={eventData.description!}
-                                    start={eventData.startDate!}
-                                    end={eventData.endDate!}
+                                    eventData={eventData}
+                                    setCurrentEvent={context.setCurrentEvent}
+                                    setWindowState={context.setWindowState}
                                 />
                             )) :
                             ""
