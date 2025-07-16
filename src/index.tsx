@@ -15,7 +15,7 @@ declare global {
 
 
 function App(): ReactElement {
-    const [windowState, setWindowState] = useState<EventState>(EventState.CLOSED);
+    const [windowState, setWindowState] = useState<EventState>(EventState.FORM);
 
     const [events, setEvents] = useState<Record<string, Array<EventData>>>({
         "2025:6:16": [

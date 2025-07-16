@@ -142,19 +142,24 @@ export function EventForm(): ReactElement {
     const onFormSubmit = (e: FormEvent) => {
         e.preventDefault();
 
-        if (event.title === null || event.description === null || event.startDate === null || event.endDate === null) {
+        if (
+            event.title === null ||
+            event.description === null ||
+            event.startDate === null ||
+            event.endDate === null
+        ) {
             return;
         }
 
         const key = dateToKey(event.startDate);
-        const events = context.events;
 
-        if (events[key] === undefined) {
-            events[key] = [];
-        }
-
-        events[key].push(event);
-        context.setEvents(events);
+        context.setEvents(prevEvents => {
+            const eventsForDay = prevEvents[key] ? [...prevEvents[key]] : [];
+            return {
+                ...prevEvents,
+                [key]: [...eventsForDay, { ...event }]
+            };
+        });
     };
 
     return (
