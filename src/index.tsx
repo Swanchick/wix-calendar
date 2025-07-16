@@ -1,4 +1,4 @@
-import React, { ReactElement, useContext, useState } from "react";
+import React, { ReactElement, useContext, useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import { Header } from "./header";
 import { Calendar } from "./calendar/calendar";
@@ -11,7 +11,17 @@ function App(): ReactElement {
     const [windowState, setWindowState] = useState<EventState>(EventState.CLOSED);
     const [currentEvent, setCurrentEvent] = useState<EventData | null>(null);
 
-    const [events, setEvents] = useState<Record<string, Array<EventData>>>(loadEvents());
+    const [events, setEvents] = useState<Record<string, Array<EventData>>>({});
+    useEffect(() => {
+        loadEvents()
+        .then((e) => {
+            if (events === e) {
+                return;
+            }
+    
+            setEvents(e);
+        });
+    }, []);
     
     const contextValue: EventContextType = {
         currentEvent: currentEvent,

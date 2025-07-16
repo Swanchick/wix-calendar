@@ -1,4 +1,4 @@
-import { EVENT_LOCAL_STORAGE, dateToKey } from "../../global";
+import { EVENT_LOCAL_STORAGE, dateToKey, buidlApiRoute } from "../../global";
 
 
 export interface EventData {
@@ -8,32 +8,65 @@ export interface EventData {
     endDate: Date | null;
 }
 
-export function loadEvents(): Record<string, Array<EventData>> {
-    const eventsString = localStorage.getItem(EVENT_LOCAL_STORAGE);
-    if (eventsString === null) {
-        return {};
-    }
+interface EventDataBase {
+    datakey: string;
+    title: string;
+    description: string;
+    startDate: string;
+    endDate: string;
+}
 
-    const events: Record<string, Array<EventData>> = JSON.parse(eventsString);
-    for (const dateKey in events) {
-        for (const event of events[dateKey]) {
-            event.startDate = new Date(event.startDate!);
-            event.endDate = new Date(event.endDate!);
-        }
-    }
+export function loadEvents(): Promise<Record<string, Array<EventData>>> {
+    const events = fetch(buidlApiRoute("/events/"))
+        .then((response) => {
+            return response.json();
+        })
+        .then((json: Array<EventDataBase>) => {
+            const events: Record<string, Array<EventData>> = {};
+            
+            for (const eventDataBase of json) {
+                const dateKey = eventDataBase.datakey;
+
+                if (events[dateKey] === undefined) {
+                    events[dateKey] = [];
+                }
+
+                const event: EventData = {
+                    title: eventDataBase.title,
+                    description: eventDataBase.description,
+                    startDate: new Date(eventDataBase.startDate),
+                    endDate: new Date(eventDataBase.endDate)
+                };
+
+                events[dateKey].push(event);
+            }
+
+            return events;
+        })
+        .catch((e) => {
+            return {};
+        });
 
     return events;
 }
 
 export function saveEvent(event: EventData) {
-    const events = loadEvents();
-    const key = dateToKey(event.startDate!);
+    const eventDataBase: EventDataBase = {
+        datakey: dateToKey(event.startDate!),
+        title: event.title!,
+        description: event.description!,
+        startDate: event.startDate!.toString(),
+        endDate: event.endDate!.toString()
+    };
 
-    if (events[key] === undefined) {
-        events[key] = [];
-    }
-
-    events[key].push(event);
-
-    localStorage.setItem(EVENT_LOCAL_STORAGE, JSON.stringify(events));
+    fetch(buidlApiRoute("/events/"), {
+        method: "POST",
+        headers: {
+            "Content-Type": "application-json"
+        },
+        body: JSON.stringify(eventDataBase)
+    })
+    .catch((e) => {
+        console.log("Cannot connect to server!");
+    });
 }

@@ -2,6 +2,17 @@ import { Month } from "./utils/month"
 
 
 export const EVENT_LOCAL_STORAGE = "wix-calendar-events";
+export const BACKEND_SERVER_API = "http://localhost:3000";
+
+export function buidlApiRoute(route: string): string {
+    let finalRoute = BACKEND_SERVER_API;
+    
+    if (route[0] !== "/") {
+        finalRoute = `${finalRoute}/`;
+    }
+
+    return `${finalRoute}${route}`;
+}
 
 export const ARROW_ID = "arrow";
 
@@ -16,21 +27,24 @@ export const DAY_NAMES = [
     "SAT",
 ];
 
+
 export const DAYS_IN_WEEK = 7;
 
+const isFebruary = true;
+
 export const MONTHS = [
-    new Month("January",    31, 0),
-    new Month("February",   0,  1, true),
-    new Month("March",      31, 2),
-    new Month("April",      30, 3),
-    new Month("May",        31, 4),
-    new Month("June",       30, 5),
-    new Month("July",       31, 6),
-    new Month("August",     31, 7),
-    new Month("September",  30, 8),
-    new Month("October",    31, 9),
-    new Month("November",   30, 10),
-    new Month("December",   31, 11),
+    new Month("January",    31, 0               ),
+    new Month("February",   0,  1, isFebruary   ),
+    new Month("March",      31, 2               ),
+    new Month("April",      30, 3               ),
+    new Month("May",        31, 4               ),
+    new Month("June",       30, 5               ),
+    new Month("July",       31, 6               ),
+    new Month("August",     31, 7               ),
+    new Month("September",  30, 8               ),
+    new Month("October",    31, 9               ),
+    new Month("November",   30, 10              ),
+    new Month("December",   31, 11              ),
 ];
 
 export const ALL_MONTHS = 12;
