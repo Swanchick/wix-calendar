@@ -5,7 +5,8 @@ import { Calendar } from "./calendar/calendar";
 import { EventWindow } from "./calendar/event/eventWindow";
 import { EventState } from "./calendar/event/eventState";
 import { EventContextType, EventContext } from "./calendar/event/eventContext";
-import { EventData } from "./calendar/event/eventData";
+import { EventData, loadEvents } from "./calendar/event/eventData";
+import { EVENT_LOCAL_STORAGE } from "./global";
 
 declare global {
     interface Window {
@@ -18,36 +19,7 @@ function App(): ReactElement {
     const [windowState, setWindowState] = useState<EventState>(EventState.CLOSED);
     const [currentEvent, setCurrentEvent] = useState<EventData | null>(null);
 
-    const [events, setEvents] = useState<Record<string, Array<EventData>>>({
-        "2025:6:16": [
-            {
-                title: "Test 2",
-                description: "Test Description",
-                startDate: new Date(2025, 6, 16, 13, 0),
-                endDate: new Date(2025, 6, 16, 14, 0)
-            },
-            {
-                title: "Test 3",
-                description: "Test Description",
-                startDate: new Date(2025, 6, 16, 14, 0),
-                endDate: new Date(2025, 6, 16, 15, 0)
-            },
-            {
-                title: "Test 4",
-                description: "Test Description",
-                startDate: new Date(2025, 6, 16, 16, 0),
-                endDate: new Date(2025, 6, 16, 18, 0)
-            }
-        ],
-        "2025:6:15": [
-            {
-                title: "Lunch",
-                description: "Eat food",
-                startDate: new Date(2025, 6, 16, 12, 0),
-                endDate: new Date(2025, 6, 16, 13, 0)
-            }
-        ]
-    });
+    const [events, setEvents] = useState<Record<string, Array<EventData>>>(loadEvents());
     
     const contextValue: EventContextType = {
         currentEvent: currentEvent,

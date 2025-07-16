@@ -1,5 +1,5 @@
 import React, { ReactElement, useState, SetStateAction, Dispatch, FormEvent, useContext } from "react";
-import { dateToKey, EventData } from "./eventData";
+import { dateToKey, EventData, saveEvent } from "./eventData";
 import { getCurrentSecondsInPercentage } from "../../global";
 import { EventContext } from "./eventContext";
 import { EventState } from "./eventState";
@@ -164,6 +164,7 @@ export function EventForm(): ReactElement {
             };
         });
 
+        saveEvent(event);
         context.setWindowState(EventState.CLOSED);
     };
 
