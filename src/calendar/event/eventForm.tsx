@@ -1,6 +1,6 @@
 import React, { ReactElement, useState, SetStateAction, Dispatch, FormEvent, useContext } from "react";
-import { dateToKey, EventData, saveEvent } from "./eventData";
-import { getCurrentSecondsInPercentage } from "../../global";
+import { EventData, saveEvent } from "./eventData";
+import { getCurrentSecondsInPercentage, dateToKey } from "../../global";
 import { EventContext } from "./eventContext";
 import { EventState } from "./eventState";
 

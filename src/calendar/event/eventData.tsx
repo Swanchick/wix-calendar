@@ -1,4 +1,4 @@
-import { EVENT_LOCAL_STORAGE } from "../../global";
+import { EVENT_LOCAL_STORAGE, dateToKey } from "../../global";
 
 
 export interface EventData {
@@ -36,8 +36,4 @@ export function saveEvent(event: EventData) {
     events[key].push(event);
 
     localStorage.setItem(EVENT_LOCAL_STORAGE, JSON.stringify(events));
-}
-
-export function dateToKey(date: Date): string {
-    return `${date.getFullYear()}:${date.getMonth()}:${date.getDate()}`;
 }

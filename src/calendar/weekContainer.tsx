@@ -1,10 +1,9 @@
 import React, { ReactElement, useContext } from "react";
-import { DAY_NAMES, DAYS_IN_WEEK, MONTHS, ALL_MONTHS } from "../global";
+import { DAY_NAMES, DAYS_IN_WEEK, MONTHS, ALL_MONTHS, dateToKey } from "../global";
 import { WeekElement } from "./weekElement";
 import { Month } from "../utils/month";
 import { TimeElements } from "./timeElements";
 import { Arrow } from "./arrow";
-import { dateToKey, EventData } from "./event/eventData";
 import { EventContext } from "./event/eventContext";
 import { WixEvent } from "./event/event";
 

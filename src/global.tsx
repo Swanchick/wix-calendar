@@ -64,3 +64,7 @@ export function formatTime(start: Date, end: Date): string {
 
     return `${startHoursStr}:${startMinutesStr} - ${endHoursStr}:${endMinutesStr}`;
 }
+
+export function dateToKey(date: Date): string {
+    return `${date.getFullYear()}:${date.getMonth()}:${date.getDate()}`;
+}
