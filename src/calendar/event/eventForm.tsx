@@ -2,7 +2,7 @@ import React, { ReactElement, useState, SetStateAction, Dispatch, FormEvent, use
 import { EventData, saveEvent } from "./eventData";
 import { getCurrentSecondsInPercentage, dateToKey } from "../../global";
 import { EventContext } from "./eventContext";
-import { EventState } from "./eventState";
+import { WindowState } from "../windowState";
 
 type InputFieldProps = {
     name: string; 
@@ -139,7 +139,7 @@ export function EventForm(): ReactElement {
     const onFormClose = (e: FormEvent) => {
         e.preventDefault();
 
-        context.setWindowState(EventState.CLOSED);
+        context.setWindowState(WindowState.CLOSED);
     };
 
     const onFormSubmit = (e: FormEvent) => {
@@ -165,7 +165,7 @@ export function EventForm(): ReactElement {
         });
 
         saveEvent(event);
-        context.setWindowState(EventState.CLOSED);
+        context.setWindowState(WindowState.CLOSED);
     };
 
     const stopPropagation = (e) => {

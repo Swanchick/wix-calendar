@@ -8,7 +8,7 @@ export interface EventData {
     endDate: Date | null;
 }
 
-interface EventDataBase {
+export interface EventDataBase {
     datakey: string;
     title: string;
     description: string;

@@ -3,25 +3,27 @@ import ReactDOM from "react-dom/client";
 import { Header } from "./header";
 import { Calendar } from "./calendar/calendar";
 import { EventWindow } from "./calendar/event/eventWindow";
-import { EventState } from "./calendar/event/eventState";
+import { WindowState } from "./calendar/windowState";
 import { EventContextType, EventContext } from "./calendar/event/eventContext";
 import { EventData, loadEvents } from "./calendar/event/eventData";
+import store from "./store";
+import { Provider } from "react-redux";
 
 function App(): ReactElement {
-    const [windowState, setWindowState] = useState<EventState>(EventState.CLOSED);
+    const [windowState, setWindowState] = useState<WindowState>(WindowState.CLOSED);
     const [currentEvent, setCurrentEvent] = useState<EventData | null>(null);
 
     const [events, setEvents] = useState<Record<string, Array<EventData>>>({});
-    useEffect(() => {
-        loadEvents()
-        .then((e) => {
-            if (events === e) {
-                return;
-            }
-    
-            setEvents(e);
-        });
-    }, []);
+
+    // useEffect(() => {
+    //     loadEvents()
+    //     .then((e) => {
+    //         if (events === e) {
+    //             return;
+    //         }
+    //         setEvents(e);
+    //     });
+    // }, []);
     
     const contextValue: EventContextType = {
         currentEvent: currentEvent,
@@ -33,14 +35,17 @@ function App(): ReactElement {
     };
 
     return (
-        <EventContext.Provider value={contextValue}>
-            <Header/>
-            <Calendar/>
-            
-            {(windowState !== EventState.CLOSED) ? 
-                (<EventWindow state={windowState}/>) : ""
-            }
-        </EventContext.Provider>
+        <Provider store={store}>
+            <EventContext.Provider value={contextValue}>
+                <Header/>
+                <Calendar/>
+                
+                {(windowState !== WindowState.CLOSED) ? 
+                    (<EventWindow state={windowState}/>) : ""
+                }
+            </EventContext.Provider>
+        </Provider>
+        
     );
 }
 

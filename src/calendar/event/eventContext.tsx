@@ -1,6 +1,6 @@
 import React, { Dispatch, SetStateAction, createContext } from "react";
 import { EventData } from "./eventData";
-import { EventState } from "./eventState";
+import { WindowState } from "../windowState";
 
 type EventRecord = Record<string, Array<EventData>>;
 
@@ -9,8 +9,8 @@ export interface EventContextType {
     setCurrentEvent: Dispatch<SetStateAction<EventData | null>>
     events: EventRecord,
     setEvents: Dispatch<SetStateAction<EventRecord>>,
-    windowState: EventState,
-    setWindowState: Dispatch<SetStateAction<EventState>>,
+    windowState: WindowState,
+    setWindowState: Dispatch<SetStateAction<WindowState>>,
 }
 
 export const EventContext = createContext<EventContextType>({
@@ -18,6 +18,6 @@ export const EventContext = createContext<EventContextType>({
     setCurrentEvent: () => {},
     events: {},
     setEvents: () => {},
-    windowState: EventState.CLOSED,
+    windowState: WindowState.CLOSED,
     setWindowState: () => {}
 });
