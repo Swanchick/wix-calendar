@@ -3,7 +3,17 @@ import { EventDataBase } from "./eventData";
 
 export type EventsState = Record<string, Array<EventDataBase>>;
 
-const initialState: EventsState = {};
+const initialState: EventsState = {
+    "2025:6:17": [
+        {
+            datakey: "2025:6:17",
+            title: "Test 1",
+            description: "Hello World",
+            startDate: (new Date(2025, 6, 17, 13)).toString(),
+            endDate: (new Date(2025, 6, 17, 14)).toString()
+        }
+    ]
+};
 
 const eventSlice = createSlice({
     name: "events",
