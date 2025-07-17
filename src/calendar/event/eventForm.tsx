@@ -3,6 +3,8 @@ import { EventData, saveEvent } from "./eventData";
 import { getCurrentSecondsInPercentage, dateToKey } from "../../global";
 import { EventContext } from "./eventContext";
 import { WindowState } from "../windowState";
+import { useDispatch } from "react-redux";
+import { addEvent } from "./evenState";
 
 type InputFieldProps = {
     name: string; 
@@ -72,6 +74,7 @@ function TextAreaField({name, onInputSubmit}: TextAreaFieldProps): ReactElement 
 
 export function EventForm(): ReactElement {    
     const context = useContext(EventContext);
+    const dispatch = useDispatch();
     
     const event: EventData = {
         title: null,
@@ -154,17 +157,9 @@ export function EventForm(): ReactElement {
             return;
         }
 
-        const key = dateToKey(event.startDate);
+        dispatch(addEvent(event));
 
-        context.setEvents(prevEvents => {
-            const eventsForDay = prevEvents[key] ? [...prevEvents[key]] : [];
-            return {
-                ...prevEvents,
-                [key]: [...eventsForDay, { ...event }]
-            };
-        });
-
-        saveEvent(event);
+        // saveEvent(event);
         context.setWindowState(WindowState.CLOSED);
     };
 
