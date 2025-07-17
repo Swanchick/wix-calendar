@@ -1,4 +1,4 @@
-import { EVENT_LOCAL_STORAGE, dateToKey, buidlApiRoute } from "../../global";
+import { dateToKey, buidlApiRoute } from "../../global";
 
 
 export interface EventData {

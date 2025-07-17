@@ -1,4 +1,4 @@
-import React, { ReactElement, useContext, useEffect, useState } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import { Header } from "./header";
 import { Calendar } from "./calendar/calendar";

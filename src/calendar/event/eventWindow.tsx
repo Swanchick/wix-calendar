@@ -6,7 +6,7 @@ import { EventDetails } from "./eventDetails";
 
 type EventWindowProps = {
     state: EventState, 
-}
+};
 
 export function EventWindow({state} : EventWindowProps): ReactElement {
     const context = useContext(EventContext);
