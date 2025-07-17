@@ -51,14 +51,16 @@ export const ALL_MONTHS = 12;
 export const ONE_HOUR_IN_PERCENTAGE = 4;
 
 export const HOURS_IN_DAY = 24;
-export const MINUTES_IN_HOUR_AND_SECONDS_IN_MINUTE = 60;
+
+export const SECONDS_IN_MINUTE = 60;
+export const SECONDS_IN_HOUR = 3600;
 
 export function getCurrentSecondsInPercentage(date: Date): number {    
-    const FULL_DAY_IN_SECONDS = Math.pow(MINUTES_IN_HOUR_AND_SECONDS_IN_MINUTE, 2) * HOURS_IN_DAY;
+    const FULL_DAY_IN_SECONDS = SECONDS_IN_HOUR * HOURS_IN_DAY;
 
     let seconds = date.getSeconds();
-    let minutesInSeconds = date.getMinutes() * 60;
-    let hoursInSeconds = date.getHours() * 3600;
+    let minutesInSeconds = date.getMinutes() * SECONDS_IN_MINUTE;
+    let hoursInSeconds = date.getHours() * SECONDS_IN_HOUR;
 
     return ((hoursInSeconds + minutesInSeconds + seconds) / FULL_DAY_IN_SECONDS) * 100;
 }
