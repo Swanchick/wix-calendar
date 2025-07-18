@@ -1,28 +1,25 @@
-import React, { ReactElement, useContext, useEffect, useState } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import { Header } from "./header";
 import { Calendar } from "./calendar/calendar";
 import { EventWindow } from "./calendar/event/eventWindow";
-import { EventState } from "./calendar/event/eventState";
+import { WindowState } from "./calendar/windowState";
 import { EventContextType, EventContext } from "./calendar/event/eventContext";
 import { EventData, loadEvents } from "./calendar/event/eventData";
+import store from "./store";
+import { Provider, useDispatch } from "react-redux";
 
 function App(): ReactElement {
-    const [windowState, setWindowState] = useState<EventState>(EventState.CLOSED);
+    const [windowState, setWindowState] = useState<WindowState>(WindowState.CLOSED);
     const [currentEvent, setCurrentEvent] = useState<EventData | null>(null);
 
     const [events, setEvents] = useState<Record<string, Array<EventData>>>({});
+    
+    const dispatch = useDispatch();
     useEffect(() => {
-        loadEvents()
-        .then((e) => {
-            if (events === e) {
-                return;
-            }
-    
-            setEvents(e);
-        });
+        loadEvents(dispatch);
     }, []);
-    
+
     const contextValue: EventContextType = {
         currentEvent: currentEvent,
         setCurrentEvent: setCurrentEvent,
@@ -37,10 +34,20 @@ function App(): ReactElement {
             <Header/>
             <Calendar/>
             
-            {(windowState !== EventState.CLOSED) ? 
+            {(windowState !== WindowState.CLOSED) ? 
                 (<EventWindow state={windowState}/>) : ""
-            }
+            } 
         </EventContext.Provider>
+        
+    );
+}
+
+function Index(): ReactElement {
+    return (
+        <Provider store={store}>
+            <App />
+        </Provider>
+        
     );
 }
 
@@ -54,5 +61,5 @@ window.onload = () => {
         return;
     }
 
-    ReactDOM.createRoot(root.parentElement).render(<App/>);
+    ReactDOM.createRoot(root.parentElement).render(<Index/>);
 }

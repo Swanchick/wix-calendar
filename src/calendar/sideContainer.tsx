@@ -1,12 +1,12 @@
 import React, { ReactElement, useContext } from "react";
 import { EventContext } from "./event/eventContext";
-import { EventState } from "./event/eventState";
+import { WindowState } from "./windowState";
 
 export function SideContainer(): ReactElement {
     const context = useContext(EventContext);
     
     const handleEventClick = () => {
-        context.setWindowState(EventState.FORM);
+        context.setWindowState(WindowState.FORM);
     };
     
     

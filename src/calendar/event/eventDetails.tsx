@@ -1,10 +1,10 @@
-import React, {ReactElement, useContext} from "react";
+import React, {ReactElement} from "react";
 import { EventData } from "./eventData";
 import { formatTime } from "../../global";
 
 type EventDetailsProps = {
     currentEvent: EventData
-}
+};
 
 export function EventDetails({currentEvent}: EventDetailsProps): ReactElement {
     return (

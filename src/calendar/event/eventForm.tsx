@@ -2,7 +2,9 @@ import React, { ReactElement, useState, SetStateAction, Dispatch, FormEvent, use
 import { EventData, saveEvent } from "./eventData";
 import { getCurrentSecondsInPercentage, dateToKey } from "../../global";
 import { EventContext } from "./eventContext";
-import { EventState } from "./eventState";
+import { WindowState } from "../windowState";
+import { useDispatch } from "react-redux";
+import { addEvent } from "./eventState";
 
 type InputFieldProps = {
     name: string; 
@@ -72,6 +74,7 @@ function TextAreaField({name, onInputSubmit}: TextAreaFieldProps): ReactElement 
 
 export function EventForm(): ReactElement {    
     const context = useContext(EventContext);
+    const dispatch = useDispatch();
     
     const event: EventData = {
         title: null,
@@ -139,7 +142,7 @@ export function EventForm(): ReactElement {
     const onFormClose = (e: FormEvent) => {
         e.preventDefault();
 
-        context.setWindowState(EventState.CLOSED);
+        context.setWindowState(WindowState.CLOSED);
     };
 
     const onFormSubmit = (e: FormEvent) => {
@@ -154,18 +157,10 @@ export function EventForm(): ReactElement {
             return;
         }
 
-        const key = dateToKey(event.startDate);
-
-        context.setEvents(prevEvents => {
-            const eventsForDay = prevEvents[key] ? [...prevEvents[key]] : [];
-            return {
-                ...prevEvents,
-                [key]: [...eventsForDay, { ...event }]
-            };
-        });
+        dispatch(addEvent(event));
 
         saveEvent(event);
-        context.setWindowState(EventState.CLOSED);
+        context.setWindowState(WindowState.CLOSED);
     };
 
     const stopPropagation = (e) => {

@@ -1,13 +1,12 @@
-import React, { Dispatch, ReactElement, SetStateAction, useContext } from "react";
+import React, { Dispatch, ReactElement, SetStateAction } from "react";
 import { getCurrentSecondsInPercentage, formatTime } from "../../global";
-import { EventContext } from "./eventContext";
 import { EventData } from "./eventData";
-import { EventState } from "./eventState";
+import { WindowState } from "../windowState";
 
 type EventProps = {
-    eventData: EventData,
-    setCurrentEvent: Dispatch<SetStateAction<EventData | null>>,
-    setWindowState: Dispatch<SetStateAction<EventState>>
+    eventData: EventData;
+    setCurrentEvent: Dispatch<SetStateAction<EventData | null>>;
+    setWindowState: Dispatch<SetStateAction<WindowState>>;
 };
 
 
@@ -17,7 +16,7 @@ export function WixEvent({eventData, setCurrentEvent, setWindowState}: EventProp
     const height = endPosition - position;
 
     const handleEventClick = (_) => {
-        setWindowState(EventState.DETAILS);
+        setWindowState(WindowState.DETAILS);
         setCurrentEvent(eventData);
     };
     

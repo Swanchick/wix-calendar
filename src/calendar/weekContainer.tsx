@@ -6,6 +6,9 @@ import { TimeElements } from "./timeElements";
 import { Arrow } from "./arrow";
 import { EventContext } from "./event/eventContext";
 import { WixEvent } from "./event/event";
+import { useSelector } from "react-redux";
+import { selectEventsByDate } from "./event/eventsSelectors";
+import { RootState } from "../store";
 
 function getPreviousMonth(month: Month): Month {
     const previousMonth = month.position - 1;
@@ -116,15 +119,13 @@ export function WeekContainer(): ReactElement {
                         }
 
                         {
-                            (events[dateToKey(dayInMonth)] !== undefined) ?
-                            events[dateToKey(dayInMonth)].map((eventData) => (
-                                <WixEvent 
+                            useSelector((state: RootState) => selectEventsByDate(state, dayInMonth).map(eventData => (
+                                <WixEvent
                                     eventData={eventData}
                                     setCurrentEvent={context.setCurrentEvent}
                                     setWindowState={context.setWindowState}
                                 />
-                            )) :
-                            ""
+                            )))
                         }
                     </div>
                 ))}
