@@ -4,7 +4,7 @@ import { getCurrentSecondsInPercentage, dateToKey } from "../../global";
 import { EventContext } from "./eventContext";
 import { WindowState } from "../windowState";
 import { useDispatch } from "react-redux";
-import { addEvent } from "./evenState";
+import { addEvent } from "./eventState";
 
 type InputFieldProps = {
     name: string; 
@@ -159,7 +159,7 @@ export function EventForm(): ReactElement {
 
         dispatch(addEvent(event));
 
-        // saveEvent(event);
+        saveEvent(event);
         context.setWindowState(WindowState.CLOSED);
     };
 

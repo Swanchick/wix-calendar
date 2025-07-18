@@ -1,4 +1,7 @@
+import { useDispatch } from "react-redux";
 import { dateToKey, buidlApiRoute } from "../../global";
+import { addEventFromDataBase } from "./eventState";
+import { Dispatch } from "@reduxjs/toolkit";
 
 
 export interface EventData {
@@ -16,38 +19,20 @@ export interface EventDataBase {
     endDate: string;
 }
 
-export function loadEvents(): Promise<Record<string, Array<EventData>>> {
-    const events = fetch(buidlApiRoute("/events/"))
-        .then((response) => {
-            return response.json();
-        })
-        .then((json: Array<EventDataBase>) => {
-            const events: Record<string, Array<EventData>> = {};
-            
-            for (const eventDataBase of json) {
-                const dateKey = eventDataBase.datakey;
+export function loadEvents(dispatch: Dispatch) {    
+    fetch(buidlApiRoute("/events/"))
+    .then((response) => {
+        return response.json();
+    })
+    .then((json: Array<EventDataBase>) => {
+        const events: Record<string, Array<EventData>> = {};
+        
+        for (const eventDataBase of json) {
+            dispatch(addEventFromDataBase(eventDataBase));
+        }
 
-                if (events[dateKey] === undefined) {
-                    events[dateKey] = [];
-                }
-
-                const event: EventData = {
-                    title: eventDataBase.title,
-                    description: eventDataBase.description,
-                    startDate: new Date(eventDataBase.startDate),
-                    endDate: new Date(eventDataBase.endDate)
-                };
-
-                events[dateKey].push(event);
-            }
-
-            return events;
-        })
-        .catch((e) => {
-            return {};
-        });
-
-    return events;
+        return events;
+    });
 }
 
 export function saveEvent(event: EventData) {

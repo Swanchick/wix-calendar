@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import eventsReducer from "./calendar/event/evenState";
+import eventsReducer from "./calendar/event/eventState";
 
 
 const store = configureStore({

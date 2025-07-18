@@ -8,7 +8,6 @@ import { EventContext } from "./event/eventContext";
 import { WixEvent } from "./event/event";
 import { useSelector } from "react-redux";
 import { selectEventsByDate } from "./event/eventsSelectors";
-import { EventsState } from "./event/evenState";
 import { RootState } from "../store";
 
 function getPreviousMonth(month: Month): Month {
